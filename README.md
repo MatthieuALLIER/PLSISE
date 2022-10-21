@@ -1,6 +1,6 @@
 # PLSISE
 
-Projet R SISE
+SISE R Project
 
 ## Collaborators :
 
