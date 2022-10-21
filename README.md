@@ -2,8 +2,8 @@
 
 SISE R Project
 
-## Collaborators :
+## Contributors
 
-Matthieu Allier
-Léo Haton
+Matthieu Allier \n
+Léo Haton \n
 Titouan Houde
