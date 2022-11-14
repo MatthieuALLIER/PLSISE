@@ -1,6 +1,9 @@
-packages <- c(
+listOfPackages <- c(
   "fastDummies",
   "pracma"
   )
 
-lapply(packages, library, character.only = TRUE)
+for (i in listOfPackages){
+  if(! i %in% installed.packages()){install.packages(i, dependencies = TRUE)}
+  require(i)
+}
