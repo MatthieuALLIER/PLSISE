@@ -109,13 +109,25 @@ fit <- function(formula, data, ncomp = 2){
 
   RotatX <- U %*% pinv(t(Ga) %*% U)
 
-  coefs <- RotatX %*% t(De)
-  coefs <- coefs * y_sd
+  coef <- RotatX %*% t(De)
+  coef <- coef * y_sd
   intercept <- y_mean
 
   #class S3 PLSA
-  instance <- list()
+  instance <- list("X" = X,
+                   "y" = y,
+                   "coef" = coef,
+                   "intercept" = intercept,
+                   "ScoresX" = Xi,
+                   "ScoresY" = Om,
+                   "WeightsX" = U,
+                   "WeightsY" = V,
+                   "LoadingsX" = Ga,
+                   "LoadingsY" = De,
+                   "N_iter" = n_iter
+                   )
   class(instance) <- "PLSDA"
+
   return(instance)
 }
 
