@@ -1,1 +1,6 @@
-library(fastDummies)
+packages <- c(
+  "fastDummies",
+  "pracma"
+  )
+
+lapply(packages, library, character.only = TRUE)

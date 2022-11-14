@@ -1,6 +1,3 @@
-library(fastDummies)
-library(pracma)
-
 center_scale <- function(x){
   means <- sapply(x, mean)
   sds <- sapply(x, sd)
