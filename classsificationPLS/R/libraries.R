@@ -1,9 +1,21 @@
 listOfPackages <- c(
-  "fastDummies",
-  "pracma"
-  )
+  #here packages between "" and separated by comma
+)
 
-for (i in listOfPackages){
-  if(! i %in% installed.packages()){install.packages(i, dependencies = TRUE)}
-  require(i)
+if(length(listOfPackages) == 0){skip=T}
+
+get.packages <- function(packages, skip = skip){
+  if(skip){
+    print("No packages required!")
+  }
+  else{
+    for(i in seq.int(length(packages))){
+      if(!require(packages[i], character.only = T)){
+        install.packages(packages[i])
+      }
+      library(packages[i], character.only = T)
+    }
+  }
 }
+
+get.packages(listOfPackages, T)

@@ -10,7 +10,5 @@ get_dummies <- function(x){
   for(modality in 1:q){
     dummies[,modality] <- ifelse(x==names[modality], 1, 0)
   }
-  return(dummies)
+  return(data.frame(dummies))
 }
-
-get_dummies(y)

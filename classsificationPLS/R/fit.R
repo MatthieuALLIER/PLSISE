@@ -24,8 +24,6 @@ fit <- function(formula, data, ncomp = 2){
   yname <- toString(formula[[2]])
   Xnames <- attributes(terms(formula, data=data))$term.labels
 
-
-
   #Get y and X data
   y <- data[, yname]
   X <- data[, Xnames]
@@ -50,23 +48,12 @@ fit <- function(formula, data, ncomp = 2){
   y_sd <- y.cs$sd
 
   #Initialisation
-  #Weights of X
-  U <- matrix(0, p, ncomp)
-
-  #Weights of y
-  V <- matrix(0, q, ncomp)
-
-  #Scores of X
-  Xi <- matrix(0, n, ncomp)
-
-  #Scores of y
-  Om <- matrix(0, n, ncomp)
-
-  #Loadings of X
-  Ga <- matrix(0, p, ncomp)
-
-  #Loadings of y
-  De <- matrix(0, q, ncomp)
+  U <- matrix(0, p, ncomp)#Weights of X
+  V <- matrix(0, q, ncomp)#Weights of y
+  Xi <- matrix(0, n, ncomp)#Scores of X
+  Om <- matrix(0, n, ncomp)#Scores of y
+  Ga <- matrix(0, p, ncomp)#Loadings of X
+  De <- matrix(0, q, ncomp)#Loadings of y
 
   Sy <- matrix(y[,1])
 
@@ -83,7 +70,7 @@ fit <- function(formula, data, ncomp = 2){
       Sx <- Xk %*% Wx
       Wy <- t(yk) %*% Sx / sum(Sx^2)
       Sy <- yk %*% Wy / sum(Wy^2)
-      Wx_diff = Wx - Wx_old
+      Wx_diff <- Wx - Wx_old
 
       if(sum(Wx_diff^2) < 1e-10 | q == 1){break}
       Wx_old <- Wx
@@ -107,7 +94,8 @@ fit <- function(formula, data, ncomp = 2){
     De[,k] <- Ly
   }
 
-  RotatX <- U %*% pinv(t(Ga) %*% U)
+  A <- (t(Ga) %*% U)
+  RotatX <- U %*% (solve(t(A) %*% A) %*% t(A))
 
   coef <- RotatX %*% t(De)
   coef <- coef * y_sd
