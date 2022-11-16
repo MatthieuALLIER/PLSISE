@@ -5,11 +5,3 @@ center_scale <- function(x){
   x.cs <- (x - means[col(x)]) / sds[col(x)]
   return(list("mean"=means, "sd"=sds, "Xk"=x.cs))
 }
-
-get_dummies <- function(x){
-  x <- as.factor(x)
-  x.dummies <- dummy_cols(x)[,2:(length(levels(x))+1)]
-  colnames(x.dummies) <- levels(x)
-  return(x.dummies)
-}
-
