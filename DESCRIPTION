@@ -3,7 +3,7 @@ Type: Package
 Title: PLS Regression SISE
 Version: 0.1.0
 Author: ALLIER Matthieu, HATON Leo, HOUDE Titouan
-Maintainer: Nobody
+Maintainer: Nobody <None>
 Description: This package provides functions to performe, use, and visualize PLS regression 
 License: None
 Encoding: UTF-8
