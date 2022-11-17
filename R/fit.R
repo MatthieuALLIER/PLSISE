@@ -34,7 +34,8 @@ fit <- function(formula, data, ncomp = 2){
   Xnames <- attributes(terms(formula, data=data))$term.labels
   
   #Check var names
-  if(!yname%in%colnames(data)){print("Error Y var of specified formula is not in data")}
+  if(!yname%in%colnames(data)){print("Error Y var of specified formula is not in data");break}
+  if(!all(Xnames%in%colnames(data))){print("Error X one (or more) var of specified formula is not in data");break}
 
   #Get y and X data
   y <- data[, yname]
