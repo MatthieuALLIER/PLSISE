@@ -21,21 +21,21 @@
 fit <- function(formula, data, ncomp = 2){
   
   #Check formula
-  if(!inherits(formula,"formula")){print("Error formula specified is not a formula object");break}
+  if(!inherits(formula,"formula")){stop("Error formula specified is not a formula object")}
   
   #Check data
-  if(!is.data.frame(data)){print("Error data specified is not a dataframe object");break}
+  if(!is.data.frame(data)){stop("Error data specified is not a dataframe object")}
   
   #Check ncomp
-  if(!ncomp == as.numeric(ncomp)){print("Error ncomp specified is not an integer");break}
+  if(!ncomp == as.numeric(ncomp)){stop("Error ncomp specified is not an integer")}
 
   #Get y and X names of columns
   yname <- toString(formula[[2]])
   Xnames <- attributes(terms(formula, data=data))$term.labels
   
   #Check var names
-  if(!yname%in%colnames(data)){print("Error Y var of specified formula is not in data");break}
-  if(!all(Xnames%in%colnames(data))){print("Error X one (or more) var of specified formula is not in data");break}
+  if(!yname%in%colnames(data)){stop("Error Y var of specified formula is not in data")}
+  if(!all(Xnames%in%colnames(data))){stop("Error X one (or more) var of specified formula is not in data")}
 
   #Get y and X data
   y <- data[, yname]
