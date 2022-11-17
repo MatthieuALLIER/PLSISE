@@ -21,25 +21,36 @@
 fit <- function(formula, data, ncomp = 2){
   
   #Check formula
-  if(!inherits(formula,"formula")){stop("Error formula specified is not a formula object")}
+  if(!inherits(formula,"formula")){stop("Error : formula specified is not a formula object")}
   
   #Check data
-  if(!is.data.frame(data)){stop("Error data specified is not a dataframe object")}
+  if(!is.data.frame(data)){stop("Error : data specified is not a dataframe object")}
   
   #Check ncomp
-  if(!ncomp == as.numeric(ncomp)){stop("Error ncomp specified is not an integer")}
+  if(length(ncomp) != 1){stop("Error : ncomp specified is not an integer")}
+  if(!is.numeric(ncomp)){stop("Error : ncomp specified is not an integer")}
+  if(as.integer(ncomp) != ncomp){stop("Error : ncomp specified is not an integer")}
 
   #Get y and X names of columns
   yname <- toString(formula[[2]])
   Xnames <- attributes(terms(formula, data=data))$term.labels
   
   #Check var names
-  if(!yname%in%colnames(data)){stop("Error Y var of specified formula is not in data")}
-  if(!all(Xnames%in%colnames(data))){stop("Error X one (or more) var of specified formula is not in data")}
+  if(!yname%in%colnames(data)){stop("Error : Y variable of specified formula is not in data")}
+  if(!all(Xnames%in%colnames(data))){stop("Error : one (or more) X variable of specified formula is not in data")}
+  
+  #Check ncomp vs nXcol
+  if(ncomp > length(Xnames)){stop("Error : ncomp must be lesser than number of X variables")}
 
   #Get y and X data
   y <- data[, yname]
   X <- data.frame(data[, Xnames])
+  
+  #Check X vars
+  if(!all(sapply(X, is.numeric))){stop("Error : one (or more) X variable is not numeric")}
+  
+  #Check y var
+  if(!is.factor(y)){stop("Error : Y variable is not factor")}
 
   #Observation descriptor
   n <- nrow(X)

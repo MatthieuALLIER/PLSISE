@@ -1,7 +1,5 @@
 get_dummies <- function(x){
-  if(!is.factor(x)){
-    return("error")
-  }
+  if(!is.factor(x)){stop("Error : x is not factor")}
   n <- length(x)
   q <- nlevels(x)
   names <- levels(x)
