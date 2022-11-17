@@ -75,7 +75,7 @@ fit <- function(formula, data, ncomp = 2){
 
   Sy <- matrix(y[,1])
 
-  for(k in 1:ncomp){
+  for(k in comp){
 
     Wx_old <- 100
 
