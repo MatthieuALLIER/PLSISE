@@ -28,7 +28,7 @@ fit <- function(formula, data, ncomp = 2){
   y <- data[, yname]
   X <- data[, Xnames]
 
-  #Descripteur d'observation
+  #Observation descriptor
   n <- nrow(X)
   p <- ncol(X)
   q <- nlevels(y)
@@ -46,14 +46,32 @@ fit <- function(formula, data, ncomp = 2){
   yk <- as.matrix(y.cs$Xk)
   y_mean <- y.cs$mean
   y_sd <- y.cs$sd
+  
+  #Name of component
+  comp <- paste0("Comp.", 1:ncomp)
 
   #Initialisation
   U <- matrix(0, p, ncomp)#Weights of X
+  rownames(U) <- colnames(X)
+  colnames(U) <- comp
+  
   V <- matrix(0, q, ncomp)#Weights of y
+  rownames(V) <- colnames(y)
+  colnames(V) <- comp
+  
   Xi <- matrix(0, n, ncomp)#Scores of X
+  colnames(Xi) <- comp
+  
   Om <- matrix(0, n, ncomp)#Scores of y
+  colnames(Om) <- comp
+  
   Ga <- matrix(0, p, ncomp)#Loadings of X
+  rownames(Ga) <- colnames(X)
+  colnames(Ga) <- comp
+  
   De <- matrix(0, q, ncomp)#Loadings of y
+  rownames(De) <- colnames(y)
+  colnames(De) <- comp
 
   Sy <- matrix(y[,1])
 
