@@ -52,30 +52,15 @@ fit <- function(formula, data, ncomp = 2){
 
   #Initialisation
   U <- matrix(0, p, ncomp)#Weights of X
-  rownames(U) <- colnames(X)
-  colnames(U) <- comp
-  
   V <- matrix(0, q, ncomp)#Weights of y
-  rownames(V) <- colnames(y)
-  colnames(V) <- comp
-  
   Xi <- matrix(0, n, ncomp)#Scores of X
-  colnames(Xi) <- comp
-  
   Om <- matrix(0, n, ncomp)#Scores of y
-  colnames(Om) <- comp
-  
   Ga <- matrix(0, p, ncomp)#Loadings of X
-  rownames(Ga) <- colnames(X)
-  colnames(Ga) <- comp
-  
   De <- matrix(0, q, ncomp)#Loadings of y
-  rownames(De) <- colnames(y)
-  colnames(De) <- comp
 
   Sy <- matrix(y[,1])
 
-  for(k in comp){
+  for(k in 1:ncomp){
 
     Wx_old <- 100
 
@@ -118,7 +103,19 @@ fit <- function(formula, data, ncomp = 2){
   coef <- RotatX %*% t(De)
   coef <- coef * y_sd
   intercept <- y_mean
-
+  
+  #Tables names
+  rownames(U) <- colnames(X)
+  colnames(U) <- comp
+  rownames(V) <- colnames(y)
+  colnames(V) <- comp
+  colnames(Xi) <- comp
+  colnames(Om) <- comp
+  rownames(Ga) <- colnames(X)
+  colnames(Ga) <- comp
+  rownames(De) <- colnames(y)
+  colnames(De) <- comp
+  
   #class S3 PLSA
   instance <- list("X" = X,
                    "y" = y,
