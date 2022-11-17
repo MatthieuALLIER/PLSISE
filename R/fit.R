@@ -19,14 +19,26 @@
 #'
 #'
 fit <- function(formula, data, ncomp = 2){
+  
+  #Check formula
+  if(!inherits(formula,"formula")){return("Error formula specified is not a formula object")}
+  
+  #Check data
+  if(!is.data.frame(data)){return("Error data specified is not a dataframe object")}
+  
+  #Check ncomp
+  if(!ncomp == as.numeric(ncomp)){return("Error ncomp specified is not an integer")}
 
   #Get y and X names of columns
   yname <- toString(formula[[2]])
   Xnames <- attributes(terms(formula, data=data))$term.labels
+  
+  #Check var names
+  if(!yname%in%colnames(data)){return("Error Y var of specified formula is not in data")}
 
   #Get y and X data
   y <- data[, yname]
-  X <- data[, Xnames]
+  X <- data.frame(data[, Xnames])
 
   #Observation descriptor
   n <- nrow(X)
