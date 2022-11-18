@@ -139,11 +139,12 @@ fit <- function(formula, data, ncomp = 2){
   colnames(Ga) <- comp
   rownames(De) <- colnames(y)
   colnames(De) <- comp
-  
+  rownames(coef) <- colnames(X)
+  colnames(coef) <- colnames(y)
+    
   #class S3 PLSA
   instance <- list("X" = X,
                    "y" = y,
-                   "coef" = coef,
                    "intercept" = intercept,
                    "ScoresX" = Xi,
                    "ScoresY" = Om,
@@ -151,7 +152,8 @@ fit <- function(formula, data, ncomp = 2){
                    "WeightsY" = V,
                    "LoadingsX" = Ga,
                    "LoadingsY" = De,
-                   "N_iter" = n_iter
+                   "N_iter" = n_iter,
+                   "coef" = coef
                    )
   class(instance) <- "PLSDA"
 
