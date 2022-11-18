@@ -156,8 +156,8 @@ fit <- function(formula, data, ncomp = 2){
                    "coef" = coef,
                    "ynames" = colnames(y),
                    "Xnames" = Xnames,
-                   "Compnames" = comp,
-                   "ncomp" = ncomp
+                   "N_comp" = ncomp,
+                   "Comps" = comp
                    )
   class(instance) <- "PLSDA"
 
