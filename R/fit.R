@@ -153,7 +153,11 @@ fit <- function(formula, data, ncomp = 2){
                    "LoadingsX" = Ga,
                    "LoadingsY" = De,
                    "N_iter" = n_iter,
-                   "coef" = coef
+                   "coef" = coef,
+                   "ynames" = colnames(y),
+                   "Xnames" = Xnames,
+                   "Compnames" = comp,
+                   "ncomp" = ncomp
                    )
   class(instance) <- "PLSDA"
 
