@@ -1,3 +1,5 @@
+pls <- fit(formula = Species~., data = iris, ncomp = 4)
+
 scree_plot <- function(pls_fit = pls){
   
   # Dependencies
@@ -31,3 +33,32 @@ scree_plot <- function(pls_fit = pls){
 }
 
 scree_plot()
+
+facto_axis <- function(Axis_1 = 1, Axis_2 = 2){
+  
+  # Get the number of component choosed in the pls fit
+  n_comp = pls$N_comp
+  
+  if(Axis_1 > n_comp | Axis_2 > n_comp){
+    
+    print("Error : On of the axis is higher than the numbers of components")
+  } else {
+    
+  library(plotly)
+  
+  # Create species columns depending on predict
+  for(c in 1:length(pls$ynames)){
+    for(l in 1:nrow(pls$y)){
+      ifelse(pls$y[l,c] == 1, Species[l] <- pls$ynames[c], Species[l] <- Species[l])
+      }
+  }
+    
+  indiv <- plot_ly(x = pls$ScoresX[,Axis_1], y = pls$ScoresX[,Axis_2], color = ~Species)
+  
+  return(indiv)
+  }
+}
+
+facto_axis()
+
+
