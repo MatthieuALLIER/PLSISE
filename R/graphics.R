@@ -41,11 +41,12 @@ facto_axis <- function(Axis_1 = 1, Axis_2 = 2){
   
   if(Axis_1 > n_comp | Axis_2 > n_comp){
     
-    print("Error : On of the axis is higher than the numbers of components")
+    print("Error : Axis value is higher than the numbers of components")
   } else {
     
   library(plotly)
   
+  Species = rep(NA, 150)
   # Create species columns depending on predict
   for(c in 1:length(pls$ynames)){
     for(l in 1:nrow(pls$y)){
@@ -61,4 +62,48 @@ facto_axis <- function(Axis_1 = 1, Axis_2 = 2){
 
 facto_axis()
 
+variables <- function(Axis_1 = 1, Axis_2 = 2){
+  
+  library(plotly)
+  # Get the number of component choosed in the pls fit
+  n_comp = pls$N_comp
 
+  if(Axis_1 > n_comp | Axis_2 > n_comp){
+  
+    print("Error : Axis value is higher than the numbers of components")
+  } else {
+    
+    # Calculate the eigen
+    eig = eigen(cor(pls$X))
+    sdev = sqrt(eig$values)
+    # eigen = eig$values / sum(eig$values)
+    X = pls$LoadingsX[,Axis_1]*sdev[Axis_1]
+    Y = pls$LoadingsX[,Axis_2]*sdev[Axis_2]
+    
+    corr_circle <- plot_ly(
+      x = X,
+      y = Y,
+    )
+    
+    corr_circle <- corr_circle %>% layout(
+      title = "Correlation circle", 
+      width = 400, 
+      # xaxis = list(title = paste("Component 1 (33.0%)"), 
+      # yaxis = list(title = "Component 2 (17.0%)"), 
+      height = 400, 
+      shapes = list(
+        list(
+          x0 = -1.1, 
+          x1 = 1.1, 
+          y0 = -1.1, 
+          y1 = 1.1, 
+          type = "circle"
+        )))
+    
+    return(corr_circle)
+  }
+}
+
+variables()
+    
+  
