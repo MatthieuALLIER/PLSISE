@@ -108,10 +108,10 @@ variables <- function(Axis_1 = 1, Axis_2 = 2){
       shapes = list(
         # problème avec la taille du cercle - A Modifier
         list(
-          x0 = -1.1, 
-          x1 = 1.1, 
-          y0 = -1.1, 
-          y1 = 1.1, 
+          x0 = -1, 
+          x1 = 1, 
+          y0 = -1, 
+          y1 = 1, 
           type = "circle"
         ))
       )
