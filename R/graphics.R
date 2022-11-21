@@ -1,5 +1,9 @@
-scree_plot <- function(pls_fit = pls){
-    
+scree_plot <- function(pls_fit = pls, method = "kaiser"){
+  
+  if(method != "kaiser" & method != "broken_sticks"){
+    return("Unknown method, check out for one known")
+    break
+  }
   # Dependencies
   library(plotly)
     
@@ -10,8 +14,29 @@ scree_plot <- function(pls_fit = pls){
   center = center_scale(pls$X[,c(1:n_comp)])
   # Calculate the eigen
   eig = eigen(cor(center$Xk))
-  eigen = eig$values / sum(eig$values)
   
+  # / sum or not ?
+  eigen = eig$values #/ sum(eig$values)
+  
+  if(method == "kaiser"){
+    toSelect = which(eigen > 1)
+    return(paste("According to the kaiser method, there is", toSelect, "component to select", sep = " "))
+  }
+  
+  if(method == "broken_sticks"){
+    toCalculate = rep(1,n_comp)
+    for(i in 1:n_comp){
+      toCalculate[i] = toCalculate[i] / i
+    }
+    broken_sticks <- data.frame(eigen, toCalculate)
+    for(i in 1:nrow(broken_sticks)){
+      broken_sticks$toCalculate[i] = sum(toCalculate[c(i:nrow(broken_sticks))])
+    }
+    toSelect = which(broken_sticks$eigen > broken_sticks$toCalculate)
+    return(paste("According to the broken sticks method, there is", toSelect, "component to select", sep = " "))
+    
+  } 
+
   # Barplot with plotly
   scree <- plot_ly(
     x = pls$Comps,
@@ -28,10 +53,12 @@ scree_plot <- function(pls_fit = pls){
                               xaxis = list(title = ""),
                               yaxis = list(title = ""))
   return(scree)
+  return(toSelect)
 }
   
 scree_plot()
-  
+
+
 facto_axis <- function(Axis_1 = 1, Axis_2 = 2){
     
   # Get the number of component choosed in the pls fit
