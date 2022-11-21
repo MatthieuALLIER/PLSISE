@@ -164,3 +164,26 @@ fit <- function(formula, data, ncomp = 2){
   return(instance)
 }
 
+print.PLSDA <- function(PLSDA){
+  #classification table
+  classification <- rbind(PLSDA$intercept, PLSDA$coef)
+  
+  LoadingsY <- PLSDA$LoadingsY
+  
+  #Print
+  cat("Coefficients : \n")
+  print(classification)
+  cat("\nLoadings Y : \n")
+  print(LoadingsY)
+}
+
+summary.PLSDA <- function(PLSDA){
+  #classification table
+  classification <- rbind(PLSDA$intercept, PLSDA$coef)
+  
+  #Print
+  cat("Coefficients : \n")
+  print(classification)
+  cat("R2 : \n")
+}
+

@@ -9,12 +9,10 @@
 #' @param newdata A data frame in which to look for variables with
 #'   which to predict.
 #'
-#' @param type type of prediction : "class" for predicted class or
-#'   "posterior" for probabilities
+#' @param type type of prediction : "class" for predicted class,
+#'   "posterior" for probabilities or "value" for values of predictions#'
 #'
-#'
-#' @returns
-#'
+#' @returns Y predictions for newdata as required in type parameter
 #'
 predict <- function(PLSDA, newdata, type = "class"){
   X <- t(newdata) - colMeans(PLSDA$X)
@@ -24,10 +22,9 @@ predict <- function(PLSDA, newdata, type = "class"){
   
   Ysoftmax <- t(apply(Y, 1, function(x) exp(x) / sum(exp(x))))
   
-  if(type=="posterior"){
-    return(Ysoftmax)
-  }else if(type=="class"){
-    Yclass <- PLSDA$yname[apply(Ysoftmax, 1, which.max)]
-    return(as.factor(Yclass))
-  }
+  Yclass <- as.factor(PLSDA$yname[apply(Ysoftmax, 1, which.max)])
+  
+  if(type=="value"){return(Y)}
+  if(type=="posterior"){return(Ysoftmax)}
+  if(type=="class"){return(Yclass)}
 }
