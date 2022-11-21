@@ -1,5 +1,5 @@
 listOfPackages <- c(
-  #here packages between "" and separated by comma
+  "plotly"
 )
 
 skip <- ifelse(length(listOfPackages) == 0, T, F)

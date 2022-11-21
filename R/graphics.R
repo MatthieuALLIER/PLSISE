@@ -4,9 +4,6 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
     return("Unknown method, check out for one known")
     break
   }
-  
-  # Dependencies
-  library(plotly)
     
   # Get the number of component choosed in the pls fit
   n_comp = pls$N_comp
@@ -56,8 +53,11 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
     
   # Add plot title and Delete xaxis and yaxis title
   scree <- scree %>% layout(title = "PLS Regression Screeplot",
-                              xaxis = list(title = ""),
+                              xaxis = list(title = "",
+                                           categoryorder = "array",
+                                           categoryarray = pls$Comps),
                               yaxis = list(title = ""))
+                              
   return(scree)
   
 
