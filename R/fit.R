@@ -181,6 +181,11 @@ summary.PLSDA <- function(PLSDA){
   #classification table
   classification <- rbind(PLSDA$intercept, PLSDA$coef)
   
+  Ypred <- predict(PLSDA, PLSDA$X, type = "value")
+  YclassCol <- apply(PLSDA$y, 1, which.max)
+  YpredClass <- Ypred[cbind(seq_along(YclassCol), YclassCol)]
+  ifelse(YpredClass>)
+  
   #Print
   cat("Coefficients : \n")
   print(classification)

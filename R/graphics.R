@@ -76,9 +76,6 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
 
   }
 }
-  
-scree_plot()
-
 
 facto_axis <- function(Axis_1 = 1, Axis_2 = 2){
     
