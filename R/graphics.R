@@ -4,16 +4,16 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
     return("Unknown method, check out for one known")
     break
   }
-    
+  
   # Get the number of component choosed in the pls fit
   n_comp = pls$N_comp
-    
+  
   # Center and scale the data
   center = center_scale(pls$X[,c(1:n_comp)])
   # Calculate the eigen
   eig = eigen(cor(center$Xk))
   eigen = eig$values
-
+  
   ### Methods ###
   # Kaiser 
   toSelect_kaiser = max(which(eigen > 1))
@@ -38,7 +38,7 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
   ColorNotSelected = "rgba(70,130,180,1)"
   
   CompSelected = c(rep(ColorSelected, select), rep(ColorNotSelected, n_comp-select))
-    
+  
   # Barplot with plotly
   scree <- plot_ly(
     x = pls$Comps,
@@ -46,69 +46,60 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
     type = "bar",
     name = "Eigen of each Comps",
     marker = list(color = CompSelected)
-    ) %>%
+  ) %>%
     # Add the scatter for the elbow method
     add_trace(x = ~pls$Comps, y = ~eigen, 
               type = 'scatter', mode = 'lines+markers', name = "Inertia between each Comps")
-    
+  
   # Add plot title and Delete xaxis and yaxis title
   scree <- scree %>% layout(title = "PLS Regression Screeplot",
-                              xaxis = list(title = "",
-                                           categoryorder = "array",
-                                           categoryarray = pls$Comps),
-                              yaxis = list(title = ""))
-                              
+                            xaxis = list(title = "",
+                                    categoryorder = "array",
+                                    categoryarray = pls$Comps),
+                            yaxis = list(title = ""))
   return(scree)
   
-
-  if(method == "broken_sticks"){
-    toCalculate = rep(1,n_comp)
-    for(i in 1:n_comp){
-      toCalculate[i] = toCalculate[i] / i
-    }
-    broken_sticks <- data.frame(eigen, toCalculate)
-    for(i in 1:nrow(broken_sticks)){
-      broken_sticks$toCalculate[i] = sum(toCalculate[c(i:nrow(broken_sticks))])
-    }
-
-    toSelect = which(broken_sticks$eigen > broken_sticks$toCalculate)
-    return(paste("According to the broken sticks method, there is", toSelect, "component to select", sep = " "))
-
-  }
 }
 
-facto_axis <- function(Axis_1 = 1, Axis_2 = 2){
-    
+scree_plot()
+
+
+facto_axis <- function(pls, Axis_1 = 1, Axis_2 = 2){
+  
   # Get the number of component choosed in the pls fit
   n_comp = pls$N_comp
-    
+  
   if(Axis_1 > n_comp | Axis_2 > n_comp){
-      
+    
     print("Error : Axis value is higher than the numbers of components")
   } else {
-      
-    library(plotly)
     
     Species = rep(NA, 150)
-    # Create species columns depending on predict
+    # Create species columns depending on PLS functions
     for(c in 1:length(pls$ynames)){
       for(l in 1:nrow(pls$y)){
         ifelse(pls$y[l,c] == 1, Species[l] <- pls$ynames[c], Species[l] <- Species[l])
-        }
+      }
     }
-      
-    indiv <- plot_ly(x = pls$ScoresX[,Axis_1], y = pls$ScoresX[,Axis_2], color = ~Species)
+    
+    indiv <- plot_ly(x = ~pls$ScoresX[,Axis_1], y = ~pls$ScoresX[,Axis_2], 
+                     color = ~Species, type = "scatter", mode = "markers")
+    
+    indiv <- indiv %>% layout(
+      title = "Chart of individuals",
+      xaxis = list(title = pls$Comps[Axis_1]),
+      yaxis = list(title = pls$Comps[Axis_2])
+    )
     
     return(indiv)
-    }
   }
-  
-facto_axis()
-  
+}
+
+facto_axis(pls)
+
 
 variables <- function(Axis_1 = 1, Axis_2 = 2){
   
-  library(plotly)
   # Get the number of component choosed in the pls fit
   n_comp = pls$N_comp
   
@@ -136,6 +127,8 @@ variables <- function(Axis_1 = 1, Axis_2 = 2){
     corr_circle <- plot_ly(
       x = X,
       y = Y,
+      width = 500,
+      height = 500,
       text = pls$Xnames
     )
     
@@ -146,24 +139,46 @@ variables <- function(Axis_1 = 1, Axis_2 = 2){
     # Layout properties
     corr_circle <- corr_circle %>% layout(
       title = "Correlation circle",
-      width = 500,
-      height = 500,
       xaxis = list(title = paste("Component", Axis_1, sep = " ")),
       yaxis = list(title = paste("Component", Axis_2, sep = " ")),
       shapes = list(
         # problème avec la taille du cercle - A Modifier
         list(
-          x0 = -1.1, 
-          x1 = 1.1, 
-          y0 = -1.1, 
-          y1 = 1.1, 
+          x0 = -1, 
+          x1 = 1, 
+          y0 = -1, 
+          y1 = 1, 
           type = "circle"
         ))
-      )
+    )
     
     return(corr_circle)
-                   
+    
   }
 }
 
 variables()
+
+
+explicatives <- function(data , varX, varY, class){
+  
+  varXnames = names(data[varX])
+  varYnames = names(data[varY])
+  
+  scatter <- plot_ly(x = as.numeric(unlist(data[varX])), 
+                     y = as.numeric(unlist(data[varY])), 
+                     color = ~as.factor(unlist(data[class])),
+                     type = "scatter", mode =  "markers")
+  
+  scatter <- scatter %>% layout(
+    title = "Explanatory variable",
+    xaxis = list(title = varXnames),
+    yaxis = list(title = varYnames)
+  )
+  
+  return(scatter)
+  
+}
+
+explicatives(data, "Sepal.Length", "Petal.Width", "Species")
+explicatives(data, 1, 4, 5)
