@@ -4,6 +4,7 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
     return("Unknown method, check out for one known")
     break
   }
+  
   # Dependencies
   library(plotly)
     
@@ -14,15 +15,52 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
   center = center_scale(pls$X[,c(1:n_comp)])
   # Calculate the eigen
   eig = eigen(cor(center$Xk))
+  eigen = eig$values
+
+  ### Methods ###
+  # Kaiser 
+  toSelect_kaiser = max(which(eigen > 1))
   
-  # / sum or not ?
-  eigen = eig$values #/ sum(eig$values)
-  
-  if(method == "kaiser"){
-    toSelect = which(eigen > 1)
-    return(paste("According to the kaiser method, there is", toSelect, "component to select", sep = " "))
+  # Broken Sticks 
+  toCalculate = rep(1,n_comp)
+  for(i in 1:n_comp){
+    toCalculate[i] = toCalculate[i] / i
+  }
+  broken_sticks <- data.frame(eigen, toCalculate)
+  for(i in 1:nrow(broken_sticks)){
+    broken_sticks$toCalculate[i] = sum(toCalculate[c(i:nrow(broken_sticks))])
   }
   
+  # Result Broken Sticks
+  toSelect_BrokenSticks = max(which(broken_sticks$eigen > broken_sticks$toCalculate))
+  
+  # Result Kaiser
+  ifelse(method == "kaiser", select <- toSelect_kaiser, select <- toSelect_BrokenSticks)
+  
+  ColorSelected = "rgba(222,45,38,1)"
+  ColorNotSelected = "rgba(70,130,180,1)"
+  
+  CompSelected = c(rep(ColorSelected, select), rep(ColorNotSelected, n_comp-select))
+    
+  # Barplot with plotly
+  scree <- plot_ly(
+    x = pls$Comps,
+    y = eigen,
+    type = "bar",
+    name = "Eigen of each Comps",
+    marker = list(color = CompSelected)
+    ) %>%
+    # Add the scatter for the elbow method
+    add_trace(x = ~pls$Comps, y = ~eigen, 
+              type = 'scatter', mode = 'lines+markers', name = "Inertia between each Comps")
+    
+  # Add plot title and Delete xaxis and yaxis title
+  scree <- scree %>% layout(title = "PLS Regression Screeplot",
+                              xaxis = list(title = ""),
+                              yaxis = list(title = ""))
+  return(scree)
+  
+
   if(method == "broken_sticks"){
     toCalculate = rep(1,n_comp)
     for(i in 1:n_comp){
@@ -32,28 +70,11 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
     for(i in 1:nrow(broken_sticks)){
       broken_sticks$toCalculate[i] = sum(toCalculate[c(i:nrow(broken_sticks))])
     }
+
     toSelect = which(broken_sticks$eigen > broken_sticks$toCalculate)
     return(paste("According to the broken sticks method, there is", toSelect, "component to select", sep = " "))
-    
-  } 
 
-  # Barplot with plotly
-  scree <- plot_ly(
-    x = pls$Comps,
-    y = eigen,
-    type = "bar",
-    name = "Eigen of each Comps"
-    ) %>%
-    # Add the scatter for the elbow method
-    add_trace(x = ~pls$Comps, y = ~eigen, 
-              type = 'scatter', mode = 'lines', name = "Inertia between each Comps")
-    
-  # Add plot title and Delete xaxis and yaxis title
-  scree <- scree %>% layout(title = "PLS Regression Screeplot",
-                              xaxis = list(title = ""),
-                              yaxis = list(title = ""))
-  return(scree)
-  return(toSelect)
+  }
 }
   
 scree_plot()
@@ -135,10 +156,10 @@ variables <- function(Axis_1 = 1, Axis_2 = 2){
       shapes = list(
         # problème avec la taille du cercle - A Modifier
         list(
-          x0 = -1, 
-          x1 = 1, 
-          y0 = -1, 
-          y1 = 1, 
+          x0 = -1.1, 
+          x1 = 1.1, 
+          y0 = -1.1, 
+          y1 = 1.1, 
           type = "circle"
         ))
       )
