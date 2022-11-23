@@ -14,6 +14,8 @@
 #'
 #' @returns Y predictions for newdata as required in type parameter
 #'
+#' @export
+#'
 predict <- function(PLSDA, newdata, type = "class"){
   X <- t(newdata) - colMeans(PLSDA$X)
   X <- X / sapply(PLSDA$X, sd)

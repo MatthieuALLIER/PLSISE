@@ -17,6 +17,7 @@
 #'
 #' @returns an object of class PLSDA with the fitted model and it Attributes.
 #'
+#' @export
 #'
 fit <- function(formula, data, ncomp = 2){
   
