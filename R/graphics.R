@@ -1,4 +1,4 @@
-scree_plot <- function(pls_fit = pls, method = "kaiser"){
+scree_plot <- function(pls, method = "kaiser"){
   
   if(method != "kaiser" & method != "broken_sticks"){
     return("Unknown method, check out for one known")
@@ -61,9 +61,6 @@ scree_plot <- function(pls_fit = pls, method = "kaiser"){
   
 }
 
-scree_plot()
-
-
 facto_axis <- function(pls, Axis_1 = 1, Axis_2 = 2){
   
   # Get the number of component choosed in the pls fit
@@ -95,10 +92,7 @@ facto_axis <- function(pls, Axis_1 = 1, Axis_2 = 2){
   }
 }
 
-facto_axis(pls)
-
-
-variables <- function(Axis_1 = 1, Axis_2 = 2){
+variables <- function(pls, Axis_1 = 1, Axis_2 = 2){
   
   # Get the number of component choosed in the pls fit
   n_comp = pls$N_comp
@@ -157,9 +151,6 @@ variables <- function(Axis_1 = 1, Axis_2 = 2){
   }
 }
 
-variables()
-
-
 explicatives <- function(data , varX, varY, class){
   
   varXnames = names(data[varX])
@@ -179,6 +170,3 @@ explicatives <- function(data , varX, varY, class){
   return(scatter)
   
 }
-
-explicatives(data, "Sepal.Length", "Petal.Width", "Species")
-explicatives(data, 1, 4, 5)

@@ -23,6 +23,7 @@ predict <- function(PLSDA, newdata, type = "class"){
   Ysoftmax <- t(apply(Y, 1, function(x) exp(x) / sum(exp(x))))
   
   Yclass <- as.factor(PLSDA$yname[apply(Ysoftmax, 1, which.max)])
+  levels(Yclass) <- colnames(PLSDA$y)
   
   if(type=="value"){return(Y)}
   if(type=="posterior"){return(Ysoftmax)}

@@ -199,7 +199,6 @@ summary.PLSDA <- function(PLSDA){
   #Print
   cat("Coefficients : \n")
   print(classification)
-  cat("R2 : \n")
+  cat("\nR2 : \n")
   print(R2)
 }
-

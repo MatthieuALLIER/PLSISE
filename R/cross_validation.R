@@ -26,7 +26,7 @@ cross_validation <- function(formula, data, ncomp, cv = 5, method = "splitTrainT
   models <- list()
   for(k in 1:cv){
     #Get the cols of X
-    Xnames <- attributes(terms(formula, data=train))$term.labels
+    Xnames <- attributes(terms(formula, data=data))$term.labels
     yname <- toString(formula[[2]])
     
     #Get fold
@@ -42,16 +42,9 @@ cross_validation <- function(formula, data, ncomp, cv = 5, method = "splitTrainT
     plsTrain <- fit(formula, train)
     predTest <- predict(plsTrain, Xtest)
     
-    confusionTable <- table(Ytest, predTest)
-    fscoreVector <- c()
-    for(i in 1:nrow(confusionTable)){
-      precision <- confusionTable[i, i] / sum(confusionTable[, i])
-      riccol <- confusionTable[i, i] / sum(confusionTable[i,])
-      fscore <- (2 * precision * riccol) / (precision + riccol)
-      fscoreVector <- append(fscoreVector, fscore)
-    }
-    Yweights <- table(Ytest) / length(Ytest)
-    globalFscore <- sum(fscoreVector * Yweights)
+    classReport <- classification_report(Ytest, predTest)
+    globalFscore <- classReport$GlobalFscore
+    
     globalFscoreVector <- append(globalFscoreVector, globalFscore)
     models[[k]] <- plsTrain
   }
