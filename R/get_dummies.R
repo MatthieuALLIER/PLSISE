@@ -3,13 +3,6 @@
 #'
 get_dummies <- function(x){
   if(!is.factor(x)){stop("Error : x is not factor")}
-  n <- length(x)
-  q <- nlevels(x)
-  names <- levels(x)
-  dummies <- matrix(0, n, q)
-  colnames(dummies) <- names
-  for(modality in 1:q){
-    dummies[,modality] <- ifelse(x==names[modality], 1, 0)
-  }
+  dummies <- sapply(levels(x), function(modality) ifelse(x==modality, 1, 0))
   return(data.frame(dummies))
 }

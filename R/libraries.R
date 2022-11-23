@@ -1,5 +1,6 @@
 listOfPackages <- c(
-  "plotly"
+  "plotly",
+  "shiny"
 )
 
 skip <- ifelse(length(listOfPackages) == 0, T, F)
