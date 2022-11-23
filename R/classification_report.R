@@ -18,10 +18,10 @@ classification_report <- function(y, ypred){
   }
   Yweights <- table(y) / length(y)
   globalFscore <- sum(fscoreVector * Yweights, na.rm=T)
-  classificationReport <- list("confusionTable" = confusionTable,
+  res <- list("ConfusionTable" = confusionTable,
                                "Precision" = precisionVector,
                                "Recall" = recallVector,
                                "Fscore" = fscoreVector,
                                "GlobalFscore" = globalFscore)
-  return(classificationReport)
+  return(res)
 }

@@ -180,25 +180,13 @@ print.PLSDA <- function(PLSDA){
 summary.PLSDA <- function(PLSDA){
   #classification table
   classification <- rbind(PLSDA$intercept, PLSDA$coef)
-  
-  Ypred <- predict(PLSDA, PLSDA$X, type = "value")
-  Ypred <- ifelse(Ypred>1, 1, Ypred)
-  Ypred <- ifelse(Ypred<0, 0, Ypred)
-  
-  YclassCol <- apply(PLSDA$y, 1, which.max)
-  Y <- PLSDA$y[cbind(seq_along(YclassCol), YclassCol)]
-  
-  YpredClass <- Ypred[cbind(seq_along(YclassCol), YclassCol)]
-  
-  YpredCenter <- t(apply(Ypred, 1, function(x) x - PLSDA$intercept))
-  
-  RSS <- sum((Y - YpredClass)^2)
-  TSS <- sum(YpredCenter[cbind(seq_along(YclassCol), YclassCol)]^2)
-  R2 <- 1 - RSS / TSS
-  
-  #Print
+  Y <- as.factor(colnames(PLSDA$y)[apply(PLSDA$y, 1, which.max)])
+  Ypred <- predict(PLSDA, PLSDA$X)
+  classReport <- classification_report(Y, Ypred)
   cat("Coefficients : \n")
   print(classification)
-  cat("\nR2 : \n")
-  print(R2)
+  cat("\nConfusion table : \n")
+  print(classReport$ConfusionTable)
+  cat("\nF1 Score : \n")
+  print(classReport$GlobalFscore)
 }
