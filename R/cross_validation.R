@@ -49,7 +49,10 @@ cross_validation <- function(formula, data, ncomp, cv = 5, method = "splitTrainT
     models[[k]] <- plsTrain
   }
   model <- models[[which.max(globalFscoreVector)]]
+  fscoreMean <- mean(globalFscoreVector, nar.rm=T)
   fscore <- globalFscoreVector[which.max(globalFscoreVector)]
-  res <- list("fscore" = fscore, "model" = model)
+  res <- list("MeanFscore" = fscoreMean, 
+              "BestFscore" = fscore, 
+              "BestModel" = model)
   return(res)
 }
