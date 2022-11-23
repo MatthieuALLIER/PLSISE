@@ -165,6 +165,9 @@ fit <- function(formula, data, ncomp = 2){
   return(instance)
 }
 
+#'
+#' @export
+#'
 print.PLSDA <- function(PLSDA){
   #classification table
   classification <- rbind(PLSDA$intercept, PLSDA$coef)
@@ -178,6 +181,9 @@ print.PLSDA <- function(PLSDA){
   print(LoadingsY)
 }
 
+#'
+#' @export
+#'
 summary.PLSDA <- function(PLSDA){
   #classification table
   classification <- rbind(PLSDA$intercept, PLSDA$coef)

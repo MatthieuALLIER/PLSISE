@@ -1,3 +1,6 @@
+#'
+#' @export
+#'
 scree_plot <- function(pls, method = "kaiser"){
   
   if(method != "kaiser" & method != "broken_sticks"){
@@ -61,6 +64,9 @@ scree_plot <- function(pls, method = "kaiser"){
   
 }
 
+#'
+#' @export
+#'
 facto_axis <- function(pls, Axis_1 = 1, Axis_2 = 2){
   
   # Get the number of component choosed in the pls fit
@@ -92,6 +98,9 @@ facto_axis <- function(pls, Axis_1 = 1, Axis_2 = 2){
   }
 }
 
+#'
+#' @export
+#'
 variables <- function(pls, Axis_1 = 1, Axis_2 = 2){
   
   # Get the number of component choosed in the pls fit
@@ -151,6 +160,9 @@ variables <- function(pls, Axis_1 = 1, Axis_2 = 2){
   }
 }
 
+#'
+#' @export
+#'
 explicatives <- function(data , varX, varY, class){
   
   varXnames = names(data[varX])

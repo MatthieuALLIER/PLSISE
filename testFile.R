@@ -17,8 +17,8 @@ summary(PLSDA)
 ypred <- predict(PLSDA, PLSDA$X)
 
 #Classification report of Y by Ypred from iris
-classification_report(data$Species, ypred)
+classification_report(iris$Species, ypred)
 
 #Cross validation of the model on iris dataset
-cross_validation(Species~., data = data, method = "kFold")
+cross_validation(Species~., data = iris, method = "kFold")
 

@@ -1,3 +1,6 @@
+#'
+#' @export
+#'
 classification_report <- function(y, ypred){
   
   #Check y and ypred shape

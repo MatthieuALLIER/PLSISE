@@ -1,3 +1,6 @@
+#'
+#' @export
+#'
 get_dummies <- function(x){
   if(!is.factor(x)){stop("Error : x is not factor")}
   n <- length(x)
