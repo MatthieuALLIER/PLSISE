@@ -1,3 +1,13 @@
+#' Center scale from PLSISE
+#'
+#' @description
+#'  Center and scale a numeric data.frame
+#'
+#' @param x a dataframe of numeric to center and scale
+#'
+#' @returns mean : means of columns
+#'  sd : standard deviations of columns
+#'  Xk : Centered and scaled X dataframe 
 #'
 #' @export
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict.R
 \name{predict}
 \alias{predict}
-\title{Fitting PLS-DA model}
+\title{Predict from PLSISE}
 \usage{
 predict(PLSDA, newdata, type = "class")
 }
@@ -20,5 +20,5 @@ which to predict.}
 Y predictions for newdata as required in type parameter
 }
 \description{
-`predict()` Predicted values based on PLSDA object.
+Predict class, probabilities or values of X data based on a fitted PLS-DA model
 }

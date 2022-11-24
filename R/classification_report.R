@@ -1,3 +1,13 @@
+#' Classification report from PLSISE
+#'
+#' @description
+#' Show the classification report of predictions and true values of an Y variable
+#'
+#' @param y True values of Y
+#'
+#' @param ypred Predicted values of Y
+#'
+#' @returns The classification report
 #'
 #' @export
 #'

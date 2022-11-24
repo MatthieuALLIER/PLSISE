@@ -1,3 +1,26 @@
+#' Cross validation from PLSISE
+#'
+#' @description
+#'  Run cross validation of the PLS-DA classifier on a dataset. Use the fit and
+#'  predict function from PLSISE package. Compare PLSDA model by fscore
+#'
+#' @param formula an object of class "formula", symbolic description of model 
+#'  to be fitted.
+#'
+#' @param data a data frame containing the variables in model.
+#' 
+#' @param ncomp an integer: the number of components to keep in model.
+#' 
+#' @param cv an integer: the number of folds for the cross validation method
+#' 
+#' @param method Method used to split the dataset in folds, use 
+#'  "splitTrainTest" to create random train and test datasets at each validation,
+#'  use "kFold" to split "data" in "cv" folds and use one of them as test at 
+#'  each validation. 
+#'
+#' @returns MeanFscore : Mean of fscore on validation
+#'  BestFscore : Max fscore on validation
+#'  BestModel : Model with best fscore on validation
 #'
 #' @export
 #'

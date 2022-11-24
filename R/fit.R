@@ -1,19 +1,14 @@
-#' Fitting PLS-DA model
+#' Fit from PLSISE
 #'
-#' @description
-#' `fit()` Fit the PLS-DA Classification to data, it can be used to carry
+#' @description Fit the PLS-DA Classification to data, it can be used to carry
 #'  classification on a target variable with 2 or more modalities
 #'
-#' @param formula an object of class "formula" (or one that can be
-#'   coerced to that class): a symbolic description of the
+#' @param formula an object of class "formula", symbolic description of the
 #'   model to be fitted.
 #'
-#' @param data a data frame, (or object coercible
-#'   by as.data.frame to a data frame) containing the variables
-#'   in the model.
-#'
+#' @param data a data frame containing the variables in the model.
+#'   
 #' @param ncomp an integer: the number of components to keep in the model.
-#'
 #'
 #' @returns an object of class PLSDA with the fitted model and it Attributes.
 #'
@@ -165,6 +160,12 @@ fit <- function(formula, data, ncomp = 2){
   return(instance)
 }
 
+#' print.PLSDA from PLSISE
+#'
+#' @description
+#' Print PLSDA object
+#'
+#' @param PLSDA a PLSDA object to print
 #'
 #' @export
 #'
@@ -181,6 +182,12 @@ print.PLSDA <- function(PLSDA){
   print(LoadingsY)
 }
 
+#' summary.PLSDA from PLSISE
+#'
+#' @description
+#' Summary of PLSDA object
+#'
+#' @param PLSDA a PLSDA object to print summary
 #'
 #' @export
 #'

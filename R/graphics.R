@@ -1,7 +1,18 @@
+#' Scree plot from PLSISE
+#'
+#' @description Show scree plot of PLSDA : X object
+#'
+#' @param PLSDA an object of class PLSDA : a fitted with PLS-DA
+#'   method (fit) model.
+#'
+#' @param method The criterion for component selection, "kaiser" or 
+#'  "broken_sticks"
+#'
+#' @returns The scree plot
 #'
 #' @export
 #'
-scree_plot <- function(pls, method = "kaiser"){
+scree_plot <- function(PLSDA, method = "kaiser"){
   
   if(method != "kaiser" & method != "broken_sticks"){
     return("Unknown method, check out for one known")
@@ -9,10 +20,10 @@ scree_plot <- function(pls, method = "kaiser"){
   }
   
   # Get the number of component choosed in the pls fit
-  n_comp = pls$N_comp
+  n_comp = PLSDA$N_comp
   
   # Center and scale the data
-  center = center_scale(pls$X[,c(1:n_comp)])
+  center = center_scale(PLSDA$X[,c(1:n_comp)])
   # Calculate the eigen
   eig = eigen(cor(center$Xk))
   eigen = eig$values
@@ -44,33 +55,45 @@ scree_plot <- function(pls, method = "kaiser"){
   
   # Barplot with plotly
   scree <- plot_ly(
-    x = pls$Comps,
+    x = PLSDA$Comps,
     y = eigen,
     type = "bar",
     name = "Eigen of each Comps",
     marker = list(color = CompSelected)
   ) %>%
     # Add the scatter for the elbow method
-    add_trace(x = ~pls$Comps, y = ~eigen, 
+    add_trace(x = ~PLSDA$Comps, y = ~eigen, 
               type = 'scatter', mode = 'lines+markers', name = "Inertia between each Comps")
   
   # Add plot title and Delete xaxis and yaxis title
   scree <- scree %>% layout(title = "PLS Regression Screeplot",
                             xaxis = list(title = "",
                                     categoryorder = "array",
-                                    categoryarray = pls$Comps),
+                                    categoryarray = PLSDA$Comps),
                             yaxis = list(title = ""))
   return(scree)
   
 }
 
+#' PLS individuals from PLSISE
+#'
+#' @description Show individuals on factorial plan
+#'
+#' @param PLSDA an object of class PLSDA : a fitted with PLS-DA
+#'   method (fit) model.
+#'
+#' @param Axis_1 an integer : the number of the component on x axis
+#'  
+#' @param Axis_2 an integer : the number of the component on y axis
+#'
+#' @returns The individuals on factorial plan plot
 #'
 #' @export
 #'
-facto_axis <- function(pls, Axis_1 = 1, Axis_2 = 2){
+pls_individuals <- function(PLSDA, Axis_1 = 1, Axis_2 = 2){
   
   # Get the number of component choosed in the pls fit
-  n_comp = pls$N_comp
+  n_comp = PLSDA$N_comp
   
   if(Axis_1 > n_comp | Axis_2 > n_comp){
     
@@ -79,32 +102,44 @@ facto_axis <- function(pls, Axis_1 = 1, Axis_2 = 2){
     
     Species = rep(NA, 150)
     # Create species columns depending on PLS functions
-    for(c in 1:length(pls$ynames)){
-      for(l in 1:nrow(pls$y)){
-        ifelse(pls$y[l,c] == 1, Species[l] <- pls$ynames[c], Species[l] <- Species[l])
+    for(c in 1:length(PLSDA$ynames)){
+      for(l in 1:nrow(PLSDA$y)){
+        ifelse(PLSDA$y[l,c] == 1, Species[l] <- PLSDA$ynames[c], Species[l] <- Species[l])
       }
     }
     
-    indiv <- plot_ly(x = ~pls$ScoresX[,Axis_1], y = ~pls$ScoresX[,Axis_2], 
+    indiv <- plot_ly(x = ~PLSDA$ScoresX[,Axis_1], y = ~PLSDA$ScoresX[,Axis_2], 
                      color = ~Species, type = "scatter", mode = "markers")
     
     indiv <- indiv %>% layout(
       title = "Chart of individuals",
-      xaxis = list(title = pls$Comps[Axis_1]),
-      yaxis = list(title = pls$Comps[Axis_2])
+      xaxis = list(title = PLSDA$Comps[Axis_1]),
+      yaxis = list(title = PLSDA$Comps[Axis_2])
     )
     
     return(indiv)
   }
 }
 
+#' PLS variables from PLSISE
+#'
+#' @description Show variables on factorial plan
+#'
+#' @param PLSDA an object of class PLSDA : a fitted with PLS-DA
+#'   method (fit) model.
+#'
+#' @param Axis_1 an integer : the number of the component on x axis
+#'  
+#' @param Axis_2 an integer : the number of the component on y axis
+#'
+#' @returns The variables on factorial plan plot
 #'
 #' @export
 #'
-variables <- function(pls, Axis_1 = 1, Axis_2 = 2){
+pls_variables <- function(PLSDA, Axis_1 = 1, Axis_2 = 2){
   
   # Get the number of component choosed in the pls fit
-  n_comp = pls$N_comp
+  n_comp = PLSDA$N_comp
   
   if(Axis_1 > n_comp  | Axis_2 > n_comp){
     
@@ -113,12 +148,12 @@ variables <- function(pls, Axis_1 = 1, Axis_2 = 2){
   } else {
     
     # Calculate the eigen
-    eig = eigen(cor(pls$X))
+    eig = eigen(cor(PLSDA$X))
     sdev = sqrt(eig$values)
     
     # Calculate the coordinate of the axis
-    X = pls$LoadingsX[,Axis_1]*sdev[Axis_1]
-    Y = pls$LoadingsX[,Axis_2]*sdev[Axis_2]
+    X = PLSDA$LoadingsX[,Axis_1]*sdev[Axis_1]
+    Y = PLSDA$LoadingsX[,Axis_2]*sdev[Axis_2]
     
     # Text proprieties
     t <- list(
@@ -132,7 +167,7 @@ variables <- function(pls, Axis_1 = 1, Axis_2 = 2){
       y = Y,
       width = 500,
       height = 500,
-      text = pls$Xnames
+      text = PLSDA$Xnames
     )
     
     # Uncomment below if we want to have the point + text
@@ -160,10 +195,23 @@ variables <- function(pls, Axis_1 = 1, Axis_2 = 2){
   }
 }
 
+#' X plot from PLSISE
+#'
+#' @description Show individuals by variables of a dataset
+#'
+#' @param data a data.frame object
+#'
+#' @param varX Number or name of variable to represent on x axis
+#'  
+#' @param varY Number or name of variable to represent on y axis
+#' 
+#' @param class A factor : class of individuals
+#'
+#' @returns The plot of individuals on variables plan
 #'
 #' @export
 #'
-explicatives <- function(data , varX, varY, class){
+x_plot <- function(data , varX, varY, class){
   
   varXnames = names(data[varX])
   varYnames = names(data[varY])

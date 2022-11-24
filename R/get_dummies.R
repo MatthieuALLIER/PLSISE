@@ -1,3 +1,11 @@
+#' Get dummies from PLSISE
+#'
+#' @description
+#' Create dummies of a factor variable
+#'
+#' @param x a factor containing values to make dummies of
+#'
+#' @returns a dataframe containing the dummies
 #'
 #' @export
 #'

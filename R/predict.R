@@ -1,7 +1,7 @@
-#' Fitting PLS-DA model
+#' Predict from PLSISE
 #'
 #' @description
-#' `predict()` Predicted values based on PLSDA object.
+#' Predict class, probabilities or values of X data based on a fitted PLS-DA model
 #'
 #' @param PLSDA an object of class PLSDA : a fitted with PLS-DA
 #'   method (fit) model.
