@@ -18,9 +18,9 @@
 #'  use "kFold" to split "data" in "cv" folds and use one of them as test at 
 #'  each validation. 
 #'
-#' @returns MeanFscore : Mean of fscore on validation
-#'  BestFscore : Max fscore on validation
-#'  BestModel : Model with best fscore on validation
+#' @returns MeanFscore : mean of fscore on validation,
+#'  BestFscore : max fscore on validation,  
+#'  BestModel : model with best fscore on validation
 #'
 #' @export
 #'

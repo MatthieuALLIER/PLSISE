@@ -22,9 +22,9 @@ use "kFold" to split "data" in "cv" folds and use one of them as test at
 each validation.}
 }
 \value{
-MeanFscore : Mean of fscore on validation
- BestFscore : Max fscore on validation
- BestModel : Model with best fscore on validation
+MeanFscore : mean of fscore on validation, \n
+ BestFscore : max fscore on validation,  \n
+ BestModel : model with best fscore on validation
 }
 \description{
 Run cross validation of the PLS-DA classifier on a dataset. Use the fit and
