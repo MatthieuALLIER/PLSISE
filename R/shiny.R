@@ -91,7 +91,7 @@ ui <- fluidPage(theme = shinytheme('united'),
                               ),
                               
                               mainPanel(
-                                
+
                                 # verbatimTextOutput("fit")
                               ),
                             ),
@@ -123,8 +123,8 @@ server <- function(input, output, session) {
         
         # Must be below data !  
         showTab(inputId = "Tabspanel", target = "Fit")
-        showTab(inputId = "Tabspanel", target = "Predict")
-        showTab(inputId = "Tabspanel", target = "Graphics")
+        # showTab(inputId = "Tabspanel", target = "Predict")
+        # showTab(inputId = "Tabspanel", target = "Graphics")
         
         return(data)
         
@@ -156,16 +156,34 @@ server <- function(input, output, session) {
     summary(dataframe())
   )
   
+  # Setting columns choices
+  
+  YFitSelector <- reactive({
+    
+    choices <- colnames(dataframe())
+    Xselected <- input$Xvar
+    ToDropY <- choices[which(choices %in% Xselected)]
+    
+    Ychoices <- choices[!choices %in% ToDropY]
+    return(Ychoices)
+    
+  })
+  
   observeEvent(dataframe(),{
+    
     updateCheckboxGroupInput(session,
                              "Xvar",
                              choices = colnames(dataframe()))
+  })
     
+    observeEvent(YFitSelector(),{
+      
     updateCheckboxGroupInput(session,
                        "Yvar",
-                       choices = colnames(dataframe()))
+                       choices = YFitSelector())
 
   })  
+  
   # output$fit <- renderPrint({
   #   
   #   df <- dataframe()
