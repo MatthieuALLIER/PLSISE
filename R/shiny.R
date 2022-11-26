@@ -93,20 +93,43 @@ ui <- fluidPage(theme = shinytheme('united'),
                                 actionButton(
                                   inputId = "RunPLS",
                                   label = "Run PLS Regression"),
-                              ),
+                              ), # SiderBarPanel
                               
                               mainPanel(
 
                                 verbatimTextOutput("fit")
-                              ),
+                              ), # Main panel
                             ),
                    ),
                    
                    tabPanel("Predict"
                    ), # Predict Tab Panel layout
                    
-                   tabPanel("Graphics"
-                   ) # Graphics Tab Panel layout
+                   navbarMenu("Graphics",
+                   tabPanel("Scree Plot",
+                            
+                            radioButtons("Method", "Select a method : ",
+                                         choices = c(Kaiser = "kaiser",
+                                                     "Broken Sticks" = "broken_sticks"),
+                                         selected = "kaiser"),
+                            
+                            plotlyOutput("scree_plot")
+                            
+                   ), # Graphics Tab Panel layout
+                   
+                   tabPanel("Variables",
+                            
+                            plotlyOutput("pls_variables")),
+                   
+                   tabPanel("Individuals",
+                            
+                            plotlyOutput("pls_individuals")),
+                   
+                   tabPanel("Explanatory variables",
+                            
+                            plotlyOutput("x_plot")),
+                   
+                   ) # NavBar Menu 
                    
                  ) # NavBar Page
 ) # Fluid Page
@@ -218,12 +241,10 @@ server <- function(input, output, session) {
           df <- dataframe()
           
           XtoSubset <- input$Xvar
-          XtoSubset <- c("SepalLengthCm", "SepalWidthCm", "PetalLengthCm", "PetalWidthCm")
-          
+
           df[,XtoSubset] <- lapply(df[,XtoSubset] , as.numeric)
           YtoFactor <- input$Yvar
-          ySub = c("Species")
-          
+
           df[YtoFactor] <- lapply(df[YtoFactor] , factor)
           
           Subset = c(XtoSubset, YtoFactor)
@@ -231,13 +252,13 @@ server <- function(input, output, session) {
           
           PlsFormula = as.formula(paste(YtoFactor, "~", ".", sep = ""))
           
-          pls <- fit(formula = PlsFormula, data = df, ncomp = input$Ncomps)
+          PLSDA <- fit(formula = PlsFormula, data = df, ncomp = input$Ncomps)
 
-          # Must be below data !  
+          # Must be below pls !  
           showTab(inputId = "Tabspanel", target = "Predict")
           showTab(inputId = "Tabspanel", target = "Graphics")
           
-          return(pls)
+          return(PLSDA)
 
         }, error = function(e){
           stop(safeError(e))
@@ -249,6 +270,33 @@ server <- function(input, output, session) {
     
     return(PLS())
 
+  })
+  
+  # Scree plot graphic
+  output$scree_plot <- renderPlotly({
+    
+    scree_plot(PLS(), method = input$Method)
+
+  })
+  
+  # Variable graphic
+  output$pls_variables <- renderPlotly({
+    
+    pls_variables(PLS(), method = input$Method)
+  })
+  
+  output$pls_individuals <- renderPlotly({
+    
+    pls_individuals(PLS())
+    
+  })
+  
+  output$x_plot <- renderPlotly({
+    
+    df = dataframe()
+    toClass = input$Yvar
+    x_plot(data = df, varX = 1, varY = 2, class = toClass)
+    
   })
   
 } # Server
