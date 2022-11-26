@@ -97,7 +97,7 @@ ui <- fluidPage(theme = shinytheme('united'),
                               
                               mainPanel(
 
-                                # verbatimTextOutput("fit")
+                                verbatimTextOutput("fit")
                               ),
                             ),
                    ),
@@ -129,8 +129,6 @@ server <- function(input, output, session) {
         
         # Must be below data !  
         showTab(inputId = "Tabspanel", target = "Fit")
-        # showTab(inputId = "Tabspanel", target = "Predict")
-        # showTab(inputId = "Tabspanel", target = "Graphics")
         
         return(data)
         
@@ -174,6 +172,7 @@ server <- function(input, output, session) {
     
   })
   
+  # Set the number of Comp and allow user to run PLS
   NumberOfComps <- reactive({
     
     lIXvar <- length(input$Xvar)
@@ -188,12 +187,14 @@ server <- function(input, output, session) {
     return(number)
   })
   
+  # Update the slider according to the dataset
   observeEvent(NumberOfComps(),{
     
     updateSliderInput(session, "Ncomps",
                       max = NumberOfComps())
   })
 
+  # X variables to select
   observeEvent(dataframe(),{
     
     updateCheckboxGroupInput(session,
@@ -201,7 +202,7 @@ server <- function(input, output, session) {
                              choices = colnames(dataframe()))
 
   })
-    
+    #  Y variables to select according to X variables
     observeEvent(YFitSelector(),{
       
     updateCheckboxGroupInput(session,
@@ -209,17 +210,46 @@ server <- function(input, output, session) {
                        choices = YFitSelector())
 
   })  
+    
+    PLS <- eventReactive(input$RunPLS,{ 
+      
+      tryCatch(
+        {
+          df <- dataframe()
+          
+          XtoSubset <- input$Xvar
+          XtoSubset <- c("SepalLengthCm", "SepalWidthCm", "PetalLengthCm", "PetalWidthCm")
+          
+          df[,XtoSubset] <- lapply(df[,XtoSubset] , as.numeric)
+          YtoFactor <- input$Yvar
+          ySub = c("Species")
+          
+          df[YtoFactor] <- lapply(df[YtoFactor] , factor)
+          
+          Subset = c(XtoSubset, YtoFactor)
+          df <- df[, Subset]
+          
+          PlsFormula = as.formula(paste(YtoFactor, "~", ".", sep = ""))
+          
+          pls <- fit(formula = PlsFormula, data = df, ncomp = input$Ncomps)
+
+          # Must be below data !  
+          showTab(inputId = "Tabspanel", target = "Predict")
+          showTab(inputId = "Tabspanel", target = "Graphics")
+          
+          return(pls)
+
+        }, error = function(e){
+          stop(safeError(e))
+        }
+      )
+    }) 
   
-  # output$fit <- renderPrint({
-  #   
-  #   df <- dataframe()
-  #   
-  #   df$Yvar <- as.factor(df$Yvar)
-  #   
-  #   pls <- fit(formula = Yvar~., data = df, ncomp = 4)
-  #   return(pls$Comps)
-  #   
-  # })
+  output$fit <- renderPrint({
+    
+    return(PLS())
+
+  })
   
 } # Server
 
