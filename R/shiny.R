@@ -41,16 +41,7 @@ ui <- fluidPage(theme = shinytheme('united'),
                                   ),
                                   column(1),
                                   
-                                  # column(4,
-                                  #        actionButton(
-                                  #          inputId = "library",
-                                  #          label = "Go to package",
-                                  #          
-                                  # ),
-                                  # )
-                                  
                                 ),
-                                br(),
                                 br(),
                                 
                                 # Input: Select number of rows to display ----
@@ -82,12 +73,26 @@ ui <- fluidPage(theme = shinytheme('united'),
                             sidebarLayout(
                               
                               sidebarPanel(
+                                # X variables checkbox
                                 checkboxGroupInput(inputId = "Xvar",
                                               label = "Select your X variables",
                                               choices = c()),
+                                
+                                # Y variables checkbox
                                 checkboxGroupInput(inputId = "Yvar",
                                                    label = "Select your Y variables",
-                                                   choices = c())
+                                                   choices = c()),
+                                
+                                # Input: Simple integer interval ----
+                                sliderInput(inputId = "Ncomps", 
+                                            label = "Select a number of components",
+                                            min = 2, max = 3,
+                                            value = 2, step = 1,
+                                            ticks = FALSE),
+                                
+                                actionButton(
+                                  inputId = "RunPLS",
+                                  label = "Run PLS Regression"),
                               ),
                               
                               mainPanel(
@@ -111,6 +116,7 @@ server <- function(input, output, session) {
   hideTab(inputId = "Tabspanel", target = "Fit")
   hideTab(inputId = "Tabspanel", target = "Predict")
   hideTab(inputId = "Tabspanel", target = "Graphics")
+  hide("RunPLS")
   
   dataframe <- eventReactive(input$submitFile,{ 
     
@@ -156,8 +162,7 @@ server <- function(input, output, session) {
     summary(dataframe())
   )
   
-  # Setting columns choices
-  
+  # Setting Y columns choices with var
   YFitSelector <- reactive({
     
     choices <- colnames(dataframe())
@@ -169,11 +174,32 @@ server <- function(input, output, session) {
     
   })
   
+  NumberOfComps <- reactive({
+    
+    lIXvar <- length(input$Xvar)
+    lIYvar <- length(input$Yvar)
+    if( lIXvar > 1 & lIYvar >= 1){
+      show("RunPLS")
+      } else {
+      hide("RunPLS")
+      }
+    number <- length(input$Xvar)
+    
+    return(number)
+  })
+  
+  observeEvent(NumberOfComps(),{
+    
+    updateSliderInput(session, "Ncomps",
+                      max = NumberOfComps())
+  })
+
   observeEvent(dataframe(),{
     
     updateCheckboxGroupInput(session,
                              "Xvar",
                              choices = colnames(dataframe()))
+
   })
     
     observeEvent(YFitSelector(),{
