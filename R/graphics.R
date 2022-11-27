@@ -100,16 +100,16 @@ pls_individuals <- function(PLSDA, Axis_1 = 1, Axis_2 = 2){
     print("Error : Axis value is higher than the numbers of components")
   } else {
     
-    Species = rep(NA, 150)
-    # Create species columns depending on PLS functions
+    class = rep(NA, length(PLSDA$y))
+    # Create class columns depending on PLS functions
     for(c in 1:length(PLSDA$ynames)){
       for(l in 1:nrow(PLSDA$y)){
-        ifelse(PLSDA$y[l,c] == 1, Species[l] <- PLSDA$ynames[c], Species[l] <- Species[l])
+        ifelse(PLSDA$y[l,c] == 1, class[l] <- PLSDA$ynames[c], class[l] <- class[l])
       }
     }
     
     indiv <- plot_ly(x = ~PLSDA$ScoresX[,Axis_1], y = ~PLSDA$ScoresX[,Axis_2], 
-                     color = ~Species, type = "scatter", mode = "markers")
+                     color = ~class, type = "scatter", mode = "markers")
     
     indiv <- indiv %>% layout(
       title = "Chart of individuals",

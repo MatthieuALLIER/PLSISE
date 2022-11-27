@@ -119,13 +119,47 @@ ui <- fluidPage(theme = shinytheme('united'),
                    
                    tabPanel("Variables",
                             
-                            plotlyOutput("pls_variables")),
+                            selectInput("X_Variables", 
+                                        label = "Select a component in X", 
+                                        choices = c(), 
+                                        selected = 1),
+                            
+                            selectInput("Y_Variables", 
+                                        label = "Select a component in Y", 
+                                        choices = c(), 
+                                        selected = 2),
+                            
+                            plotlyOutput("pls_variables")
+
+                            ),
+                   
+                   
                    
                    tabPanel("Individuals",
+                            
+                            selectInput("X_Individuals", 
+                                        label = "Select a component in X", 
+                                        choices = c(), 
+                                        selected = 1),
+                            
+                            selectInput("Y_Individuals", 
+                                        label = "Select a component in Y", 
+                                        choices = c(), 
+                                        selected = 2),
                             
                             plotlyOutput("pls_individuals")),
                    
                    tabPanel("Explanatory variables",
+                            
+                            selectInput("plot_X", 
+                                        label = "Select a column in X", 
+                                        choices = c(), 
+                                        selected = 1),
+                            
+                            selectInput("plot_Y", 
+                                        label = "Select a column in Y", 
+                                        choices = c(), 
+                                        selected = 2),
                             
                             plotlyOutput("x_plot")),
                    
@@ -223,8 +257,8 @@ server <- function(input, output, session) {
     updateCheckboxGroupInput(session,
                              "Xvar",
                              choices = colnames(dataframe()))
-
   })
+  
     #  Y variables to select according to X variables
     observeEvent(YFitSelector(),{
       
@@ -279,23 +313,117 @@ server <- function(input, output, session) {
 
   })
   
+  # Setting Y columns choices with var
+  YCompsVariableSelector <- reactive({
+    
+    Comps <- c(1:PLS()$N_comp)
+    Xselected <- input$X_Variables
+    ToDropY <- Comps[which(Comps %in% Xselected)]
+    
+    Ycomps <- Comps[!Comps %in% ToDropY]
+    return(Ycomps)
+    
+  })
+  
+  # X variables to select
+  observeEvent(PLS()$N_comp,{
+    
+    V_Comps = c(1:PLS()$N_comp)
+    
+    updateSelectInput(session,
+                             "X_Variables",
+                             choices = V_Comps)
+    
+    updateSelectInput(session,
+                      "X_Individuals",
+                      choices = V_Comps)
+  })
+    
+    #  Y variables to select according to X variables
+    observeEvent(YCompsVariableSelector(),{
+      
+      updateSelectInput(session,
+                               "Y_Variables",
+                               choices = YCompsVariableSelector())
+
+      })
+    
   # Variable graphic
   output$pls_variables <- renderPlotly({
     
-    pls_variables(PLS(), method = input$Method)
+    pls_variables(PLS(), 
+                  Axis_1 = as.numeric(input$X_Variables), 
+                  Axis_2 = as.numeric(input$Y_Variables))
+  })
+
+  # Setting Y columns choices with var
+  YCompsIndividualsSelector <- reactive({
+    
+    Comps <- c(1:PLS()$N_comp)
+    Xselected <- input$X_Individuals
+    ToDropY <- Comps[which(Comps %in% Xselected)]
+    
+    Ycomps <- Comps[!Comps %in% ToDropY]
+    return(Ycomps)
+    
+  })
+  
+  observeEvent(YCompsIndividualsSelector(),{
+
+    updateSelectInput(session,
+                      "Y_Individuals",
+                      choices = YCompsIndividualsSelector())
   })
   
   output$pls_individuals <- renderPlotly({
     
-    pls_individuals(PLS())
+    pls_individuals(PLS(),
+                    Axis_1 = as.numeric(input$X_Individuals),
+                    Axis_2 = as.numeric(input$Y_Individuals))
     
   })
   
+  YColumns <- reactive({
+    
+    columns <- colnames(dataframe())
+    toClass = input$Yvar
+    Xselected <- input$plot_X
+    ToDropY <- columns[which(columns %in% Xselected)]
+    ToDropY <- c(ToDropY, toClass)
+    Ycolumns <- columns[!columns %in% ToDropY]
+    return(Ycolumns)
+    
+  })
+  
+  observeEvent(YColumns(),{
+    
+    updateSelectInput(session,
+                      "plot_Y",
+                      choices = YColumns())
+  })
+  
+
+  
+  XColumns <- reactive({
+    
+    # Delete Yvar
+    cols <- colnames(dataframe())
+    DelClass <- input$Yvar
+    ColWithoutYvar <- cols[!cols %in% DelClass]
+    
+  })
+  
+  observeEvent(XColumns(),{
+    
+    updateSelectInput(session,
+                      "plot_X",
+                      choices =  XColumns())
+  })
+    
   output$x_plot <- renderPlotly({
     
-    df = dataframe()
     toClass = input$Yvar
-    x_plot(data = df, varX = 1, varY = 2, class = toClass)
+    x_plot(data = dataframe(), varX = input$plot_X, varY = input$plot_Y, class = toClass)
     
   })
   
