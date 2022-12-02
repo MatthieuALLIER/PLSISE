@@ -1,82 +1,82 @@
-# SELECTION DE VARIABLE
+# VARIABLE SELECTION
 
-# ENTREES DE LA FONCTION
-# DF : ensemble des variables explicatives
-# cible : vecteur cible
-# alpha : Seuil définissant la contribution des variables (significative ou non)
+# FUNCTION INPUTS
+# DF: set of explanatory variables
+# target : target vector
+# alpha : Threshold defining the contribution of the variables (significant or not)
 
 select_variable <- function(DF,cible,alpha = 0.05){
   
-  # vérif des paramètres
+  # Checking the parameters
   if (!is.data.frame(DF)){stop("Error : Format Dataframe exigé")}
   nbNum <- sum(sapply(DF,is.numeric))
   if (nbNum < ncol(DF)){stop("Error : Les colonnes explicatives ne sont pas toutes numériques")}
   if (!is.factor(cible)) {cible <- factor(cible)}
   if (nrow(DF) != length(cible)){stop("Différences d'observations entre DF et Y")}
   
-  # Calculs préparatoires
-  n = nrow(DF) # Nombre d'observations
-  p = ncol(DF) # Nombre de variable explicatives
-  levels = levels(cible) # Affiche les différentes modalités de la variable cible
-  nlevels = nlevels(cible) # Nombre de modalités dans la variable cible
+  # Preparatory calculations
+  n = nrow(DF) # Number of observations
+  p = ncol(DF) # Number of explanatory variables
+  levels = levels(cible) # Displays the different modalities of the target variable
+  nlevels = nlevels(cible) # Number of terms in the target variable
   
-  # Matrice des variances covariances conditionnelles
+  # Matrix of conditional variances covariances
   V_cov_cond = lapply(levels,function(t){m <- as.matrix(DF[cible==t,]);(nrow(m)-1)*cov(m)})
   
-  # Matrice des covariance intra-classe
+  # Intra-class covariance matrix
   W = Reduce("+",V_cov_cond)/(n) 
   
-  # Matrice des variances covariances totales
+  # Matrix of total variances covariances
   V = (n-1)/n*cov(DF) 
 
-  # Initialisation des paramètres pour la recherche et l'ajout des variables
-  lst_Var_Selected = c() # Variables sélectionnées (vide au départ)
-  TotVar = colnames(DF) # Ensemble des variables explicatives
-  i = 0 # Nombre de variables sélectionnées à l'étape en cours
-  lambda = 1.0  # Valeur de départ (0 variables sélectionnées au départ)
+  # Initialization of parameters for searching and adding variables
+  lst_Var_Selected = c() # Selected variables (empty at start)
+  TotVar = colnames(DF) # Set of explanatory variables
+  i = 0 # Number of variables selected in the current step
+  lambda = 1.0  # Start value (0 variables selected at start)
 
   while (TRUE){
     
-    if (length(TotVar) == 0){ # Cas où pas de variable à sélectionner
-      break  # On sort de la boucle et fin du processus de sélection de variable
+    if (length(TotVar) == 0){ # Case where no variable to select
+      break  # Exit the loop and end the variable selection process
       }
     
-    ResultMatrix = matrix(0,nrow=length(TotVar),ncol=3) # Matrice des résultats 
-    rownames(ResultMatrix) = TotVar # Nom des variables en ligne
-    colnames(ResultMatrix) = c("Lambda","Fisher","p-value") # Attribution des 3 résultats sur chaque variable
+    ResultMatrix = matrix(0,nrow=length(TotVar),ncol=3) # Results Matrix 
+    rownames(ResultMatrix) = TotVar # Name of the variables in line
+    colnames(ResultMatrix) = c("Lambda","Fisher","p-value") # Attribution of the 3 results on each variable
 
-    for (variable in TotVar){ # Pour chaque variable explicative
-      lst_temp = c(lst_Var_Selected,variable) # Ajout de la variable dans la liste
-      W_temp = as.matrix(W[lst_temp,lst_temp]) # Calcul de la matrice W en fonction de la liste courante des variables
-      V_temp = as.matrix(V[lst_temp,lst_temp]) # Calcul de la matrice V en fonction de la liste courante des variables
+    for (variable in TotVar){ # For each explanatory variable
+      lst_temp = c(lst_Var_Selected,variable) # Add the variable to the list
+      W_temp = as.matrix(W[lst_temp,lst_temp]) # Computation of the matrix W according to the current list of variables
+      V_temp = as.matrix(V[lst_temp,lst_temp]) # Calculation of the matrix V according to the current list of variables
 
-      lambda_temp = det(W_temp)/det(V_temp) # Calcul du lambda
-      Fisher = (n-nlevels-i)/(nlevels-1)*(lambda/lambda_temp-1) # Statistique de test
-      pvalue = pf(Fisher,nlevels-1,n-nlevels-i,lower.tail=FALSE) # Calcul de la p-value
-      ResultMatrix[variable,] = c(lambda_temp,Fisher,pvalue) # On ajoute les résultats sur la ligne correspondante à la variable 
+      lambda_temp = det(W_temp)/det(V_temp) # Lambda calculation
+      Fisher = (n-nlevels-i)/(nlevels-1)*(lambda/lambda_temp-1) # Test statistics
+      pvalue = pf(Fisher,nlevels-1,n-nlevels-i,lower.tail=FALSE) # Calculation of the p-value
+      ResultMatrix[variable,] = c(lambda_temp,Fisher,pvalue) # We add the results on the line corresponding to the variable 
     }
     
     if (nrow(ResultMatrix) > 1){ 
       ResultMatrix = ResultMatrix[order(ResultMatrix[,"Fisher"],decreasing=TRUE),]} 
-      # On trie les résultats de la matrice par ordre décroissant sur la statistique de Fisher
+      # The results of the matrix are sorted in descending order on the Fisher statistic
     
-    if (alpha > ResultMatrix[1,"p-value"]){ # On récupère la meilleure variable en vérifiant la valeur de la p-value pour la significativité de la variable
-      best = rownames(ResultMatrix)[1] # Nom de la variable sélectionnée
-      lst_Var_Selected = c(lst_Var_Selected,best) # Ajout de la variable dans la liste des variables sélectionnées
+    if (alpha > ResultMatrix[1,"p-value"]){ # The best variable is recovered by checking the p-value for the significance of the variable
+      best = rownames(ResultMatrix)[1] # Name of the selected variable
+      lst_Var_Selected = c(lst_Var_Selected,best) # Add the variable to the list of selected variables
       TotVar = TotVar[TotVar != best]
       i = i + 1
       lambda = ResultMatrix[1,"Lambda"]
     } else {
-      break # Aucune variable correspondante.
+      break # No corresponding variable.
     }
   }
- return(lst_Var_Selected) # Variables sélectionnées en sortie
+ return(lst_Var_Selected) # Selected output variables
 }
 
 # Test
 data(iris)
 str(iris)
 
-#Appel de la fonction
+#Calling the function
 test <- select_variable(DF=iris[1:4],cible=iris$Species,alpha=0.01)
 print(test)
