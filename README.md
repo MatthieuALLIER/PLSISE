@@ -16,6 +16,9 @@ Once the installation is successful, you can now access all the features of the 
 - Variable selection
 - ...
 
+## Function Fit
+
+
 ## Contributors
 
 Matthieu Allier  
