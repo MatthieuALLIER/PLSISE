@@ -10,6 +10,7 @@ It is a method to maximize the covariance between the independent variables X an
 ## Package 
 The installation of the package is required and is done directly through the Github access. In order to do this ...
 
+Once the installation is successful, you can now access the full functionality of the package. You will find these different functions: 
 
 ## Contributors
 
