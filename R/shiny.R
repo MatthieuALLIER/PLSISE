@@ -3,169 +3,228 @@ load("PLSISE/R/functions.rdata")
 source("~/GitHub/PLSISE/R/libraries.R", echo=TRUE)
 
 ui <- fluidPage(theme = shinytheme('united'),
-     
-     useShinyjs(),
-     
-     # Application title
-     navbarPage(
-       "Partial Least Square Regression : ",
-       id = "Tabspanel",
-       
-       tabPanel(title = "Add files",
                 
-                sidebarLayout(
-                  sidebarPanel(
-                    #  Input: Select a file ----
-                    fileInput("datafile", "Choose CSV File",
-                              multiple = FALSE,
-                              accept = c("text/csv",
-                                         "text/comma-separated-values,text/plain",
-                                         ".csv")),
-                    
-                    # Input: Checkbox if file has header ----
-                    checkboxInput("header", "Header", TRUE),
-                    
-                    # Input: Select separator ----
-                    radioButtons("inSep", "Separator",
-                                 choices = c(Comma = ",",
-                                             Semicolon = ";",
-                                             Tab = "\t"),
-                                 selected = ","),
-                    
-                    fluidRow(
-                      column(3,
-                             actionButton(
-                               inputId = "submitFile",
-                               label = "Show file",
+                useShinyjs(),
+                
+                # Application title
+                navbarPage(
+                  "Partial Least Square Regression : ",
+                  id = "Tabspanel",
+                  
+                  tabPanel(title = "Add files",
+                           
+                           sidebarLayout(
+                             sidebarPanel(
+                               #  Input: Select a file ----
+                               fileInput("datafile", "Choose CSV File",
+                                         multiple = FALSE,
+                                         accept = c("text/csv",
+                                                    "text/comma-separated-values,text/plain",
+                                                    ".csv")),
+                               
+                               # Input: Checkbox if file has header ----
+                               checkboxInput("header", "Header", TRUE),
+                               
+                               # Input: Select separator ----
+                               radioButtons("inSep", "Separator",
+                                            choices = c(Comma = ",",
+                                                        Semicolon = ";",
+                                                        Tab = "\t"),
+                                            selected = ","),
+                               
+                               fluidRow(
+                                 column(3,
+                                        actionButton(
+                                          inputId = "submitFile",
+                                          label = "Show file",
+                                        ),
+                                 ),
+                                 column(1),
+                                 
+                               ),
+                               br(),
+                               
+                               # Input: Select number of rows to display ----
+                               radioButtons("disp", "Display",
+                                            choices = c(Head = "head",
+                                                        "100" = "100",
+                                                        All = "all"),
+                                            selected = "head"),
+                               
                              ),
-                      ),
-                      column(1),
-                      
-                    ),
-                    br(),
-                    
-                    # Input: Select number of rows to display ----
-                    radioButtons("disp", "Display",
-                                 choices = c(Head = "head",
-                                             "100" = "100",
-                                             All = "all"),
-                                 selected = "head"),
-                    
+                             
+                             mainPanel(
+                               verbatimTextOutput("summary")
+                             ) # Main Panel for summary
+                             
+                           ), # Sidebar Layout
+                           
+                           # Main panel for displaying outputs ----
+                           mainPanel(
+                             
+                             # Output: Data file ----
+                             dataTableOutput("contents")
+                             
+                           ) # Table Output Main                        
+                  ), # Add Files Tab Panel layout
+                  
+                  
+                  tabPanel(title = "Fit",
+                           
+                           sidebarLayout(
+                             
+                             sidebarPanel(
+                               # X variables checkbox
+                               checkboxGroupInput(inputId = "Xvar",
+                                                  label = "Select your X variables",
+                                                  choices = c()),
+                               
+                               # Y variables checkbox
+                               checkboxGroupInput(inputId = "Yvar",
+                                                  label = "Select your Y variables",
+                                                  choices = c()),
+                               
+                               # Input: Simple integer interval ----
+                               sliderInput(inputId = "Ncomps", 
+                                           label = "Select a number of components",
+                                           min = 2, max = 3,
+                                           value = 2, step = 1,
+                                           ticks = FALSE),
+                               
+                               actionButton(
+                                 inputId = "RunPLS",
+                                 label = "Run PLS Regression"),
+                             ), # SiderBarPanel
+                             
+                             mainPanel(
+                               
+                               verbatimTextOutput("fit")
+                             ), # Main panel
+                           ),
                   ),
                   
-                  mainPanel(
-                    verbatimTextOutput("summary")
-                  ) # Main Panel for summary
-                  
-                ), # Sidebar Layout
-                
-                # Main panel for displaying outputs ----
-                mainPanel(
-                  
-                  # Output: Data file ----
-                  dataTableOutput("contents")
-                  
-                ) # Table Output Main                        
-       ), # Add Files Tab Panel layout
-       
-       tabPanel(title = "Fit",
-                
-                sidebarLayout(
-                  
-                  sidebarPanel(
-                    # X variables checkbox
-                    checkboxGroupInput(inputId = "Xvar",
-                                  label = "Select your X variables",
-                                  choices = c()),
-                    
-                    # Y variables checkbox
-                    checkboxGroupInput(inputId = "Yvar",
-                                       label = "Select your Y variables",
-                                       choices = c()),
-                    
-                    # Input: Simple integer interval ----
-                    sliderInput(inputId = "Ncomps", 
-                                label = "Select a number of components",
-                                min = 2, max = 3,
-                                value = 2, step = 1,
-                                ticks = FALSE),
-                    
-                    actionButton(
-                      inputId = "RunPLS",
-                      label = "Run PLS Regression"),
-                  ), # SiderBarPanel
-                  
-                  mainPanel(
+                  tabPanel(title = "Predict",
+                           
+                           sidebarLayout(
+                             sidebarPanel(
+                               #  Input: Select a file ----
+                               fileInput("dataPred", "Choose CSV File",
+                                         multiple = FALSE,
+                                         accept = c("text/csv",
+                                                    "text/comma-separated-values,text/plain",
+                                                    ".csv")),
+                               
+                               # Input: Checkbox if file has header ----
+                               checkboxInput("PredHeader", "Header", TRUE),
+                               
+                               # Input: Select separator ----
+                               radioButtons("PredinSep", "Separator",
+                                            choices = c(Comma = ",",
+                                                        Semicolon = ";",
+                                                        Tab = "\t"),
+                                            selected = ","),
+                               
+                               radioButtons("type", "Prediction value : ",
+                                            choices = c(Value = "value",
+                                                        Softmax = "posterior",
+                                                        Class = "class"),
+                                            selected = "class"),
+                               
+                               fluidRow(
+                                 column(3,
+                                        actionButton(
+                                          inputId = "doPrediction",
+                                          label = "Predict my file !",
+                                        ),
+                                 ),
+                                 column(1),
+                                 
+                               ),
 
-                    verbatimTextOutput("fit")
-                  ), # Main panel
-                ),
-       ),
-       
-       tabPanel("Predict"
-       ), # Predict Tab Panel layout
-       
-       navbarMenu("Graphics",
-       tabPanel("Scree Plot",
-                
-                radioButtons("Method", "Select a method : ",
-                             choices = c(Kaiser = "kaiser",
-                                         "Broken Sticks" = "broken_sticks"),
-                             selected = "kaiser"),
-                
-                plotlyOutput("scree_plot")
-                
-       ), # Graphics Tab Panel layout
-       
-       tabPanel("Variables",
-                
-                selectInput("X_Variables", 
-                            label = "Select a component in X", 
-                            choices = c(), 
-                            selected = 1),
-                
-                selectInput("Y_Variables", 
-                            label = "Select a component in Y", 
-                            choices = c(), 
-                            selected = 2),
-                
-                plotlyOutput("pls_variables")
-
-                ),
-       
-       
-       
-       tabPanel("Individuals",
-                
-                selectInput("X_Individuals", 
-                            label = "Select a component in X", 
-                            choices = c(), 
-                            selected = 1),
-                
-                selectInput("Y_Individuals", 
-                            label = "Select a component in Y", 
-                            choices = c(), 
-                            selected = 2),
-                
-                plotlyOutput("pls_individuals")),
-       
-       tabPanel("Explanatory variables",
-                
-                selectInput("plot_X", 
-                            label = "Select a column in X", 
-                            choices = c(), 
-                            selected = 1),
-                
-                selectInput("plot_Y", 
-                            label = "Select a column in Y", 
-                            choices = c(), 
-                            selected = 2),
-                
-                plotlyOutput("x_plot")),
-       
-       ) # NavBar Menu 
-       
-     ) # NavBar Page
+                               # Input: Select number of rows to display ----
+                               radioButtons(inputId = "PredDisplay", label = "Display",
+                                            choices = c(Head = "head",
+                                                        "100" = "100",
+                                                        All = "all"),
+                                            selected = "head"),
+                               
+                             ),
+                             
+                             mainPanel(
+                               verbatimTextOutput("PrintPredict")
+                             ) # Main Panel for Prediction
+                             
+                           ), # Sidebar Layout
+                           
+                           mainPanel(
+                             
+                             # Output: Data Pred ----
+                             DT::dataTableOutput("Predcontents")
+                             
+                           ) # Table Output Main                        
+                  ), # Prediction Tab Panel layout
+                  
+                  navbarMenu("Graphics",
+                             tabPanel("Scree Plot",
+                                      
+                                      radioButtons("Method", "Select a method : ",
+                                                   choices = c(Kaiser = "kaiser",
+                                                               "Broken Sticks" = "broken_sticks"),
+                                                   selected = "kaiser"),
+                                      
+                                      plotlyOutput("scree_plot")
+                                      
+                             ), # Graphics Tab Panel layout
+                             
+                             tabPanel("Variables",
+                                      
+                                      selectInput("X_Variables", 
+                                                  label = "Select a component in X", 
+                                                  choices = c(), 
+                                                  selected = 1),
+                                      
+                                      selectInput("Y_Variables", 
+                                                  label = "Select a component in Y", 
+                                                  choices = c(), 
+                                                  selected = 2),
+                                      
+                                      plotlyOutput("pls_variables")
+                                      
+                             ),
+                             
+                             
+                             
+                             tabPanel("Individuals",
+                                      
+                                      selectInput("X_Individuals", 
+                                                  label = "Select a component in X", 
+                                                  choices = c(), 
+                                                  selected = 1),
+                                      
+                                      selectInput("Y_Individuals", 
+                                                  label = "Select a component in Y", 
+                                                  choices = c(), 
+                                                  selected = 2),
+                                      
+                                      plotlyOutput("pls_individuals")),
+                             
+                             tabPanel("Explanatory variables",
+                                      
+                                      selectInput("plot_X", 
+                                                  label = "Select a column in X", 
+                                                  choices = c(), 
+                                                  selected = 1),
+                                      
+                                      selectInput("plot_Y", 
+                                                  label = "Select a column in Y", 
+                                                  choices = c(), 
+                                                  selected = 2),
+                                      
+                                      plotlyOutput("x_plot")),
+                             
+                  ) # NavBar Menu 
+                  
+                ) # NavBar Page
 ) # Fluid Page
 
 server <- function(input, output, session) {
@@ -236,9 +295,9 @@ server <- function(input, output, session) {
     lIYvar <- length(input$Yvar)
     if( lIXvar > 1 & lIYvar >= 1){
       show("RunPLS")
-      } else {
+    } else {
       hide("RunPLS")
-      }
+    }
     number <- length(input$Xvar)
     
     return(number)
@@ -250,7 +309,7 @@ server <- function(input, output, session) {
     updateSliderInput(session, "Ncomps",
                       max = NumberOfComps())
   })
-
+  
   # X variables to select
   observeEvent(dataframe(),{
     
@@ -259,58 +318,58 @@ server <- function(input, output, session) {
                              choices = colnames(dataframe()))
   })
   
-    #  Y variables to select according to X variables
-    observeEvent(YFitSelector(),{
-      
-    updateCheckboxGroupInput(session,
-                       "Yvar",
-                       choices = YFitSelector())
-
-  })  
+  #  Y variables to select according to X variables
+  observeEvent(YFitSelector(),{
     
-    PLS <- eventReactive(input$RunPLS,{ 
-      
-      tryCatch(
-        {
-          df <- dataframe()
-          
-          XtoSubset <- input$Xvar
-
-          df[,XtoSubset] <- lapply(df[,XtoSubset] , as.numeric)
-          YtoFactor <- input$Yvar
-
-          df[YtoFactor] <- lapply(df[YtoFactor] , factor)
-          
-          Subset = c(XtoSubset, YtoFactor)
-          df <- df[, Subset]
-          
-          PlsFormula = as.formula(paste(YtoFactor, "~", ".", sep = ""))
-          
-          PLSDA <- fit(formula = PlsFormula, data = df, ncomp = input$Ncomps)
-
-          # Must be below pls !  
-          showTab(inputId = "Tabspanel", target = "Predict")
-          showTab(inputId = "Tabspanel", target = "Graphics")
-          
-          return(PLSDA)
-
-        }, error = function(e){
-          stop(safeError(e))
-        }
-      )
-    }) 
+    updateCheckboxGroupInput(session,
+                             "Yvar",
+                             choices = YFitSelector())
+    
+  })  
+  
+  PLS <- eventReactive(input$RunPLS,{ 
+    
+    tryCatch(
+      {
+        df <- dataframe()
+        
+        XtoSubset <- input$Xvar
+        
+        df[,XtoSubset] <- lapply(df[,XtoSubset] , as.numeric)
+        YtoFactor <- input$Yvar
+        
+        df[YtoFactor] <- lapply(df[YtoFactor] , factor)
+        
+        Subset = c(XtoSubset, YtoFactor)
+        df <- df[, Subset]
+        
+        PlsFormula = as.formula(paste(YtoFactor, "~", ".", sep = ""))
+        
+        PLSDA <- fit(formula = PlsFormula, data = df, ncomp = input$Ncomps)
+        
+        # Must be below pls !  
+        showTab(inputId = "Tabspanel", target = "Predict")
+        showTab(inputId = "Tabspanel", target = "Graphics")
+        
+        return(PLSDA)
+        
+      }, error = function(e){
+        stop(safeError(e))
+      }
+    )
+  }) 
   
   output$fit <- renderPrint({
     
     return(PLS())
-
+    
   })
   
   # Scree plot graphic
   output$scree_plot <- renderPlotly({
     
     scree_plot(PLS(), method = input$Method)
-
+    
   })
   
   # Setting Y columns choices with var
@@ -331,23 +390,23 @@ server <- function(input, output, session) {
     V_Comps = c(1:PLS()$N_comp)
     
     updateSelectInput(session,
-                             "X_Variables",
-                             choices = V_Comps)
+                      "X_Variables",
+                      choices = V_Comps)
     
     updateSelectInput(session,
                       "X_Individuals",
                       choices = V_Comps)
   })
+  
+  #  Y variables to select according to X variables
+  observeEvent(YCompsVariableSelector(),{
     
-    #  Y variables to select according to X variables
-    observeEvent(YCompsVariableSelector(),{
-      
-      updateSelectInput(session,
-                               "Y_Variables",
-                               choices = YCompsVariableSelector())
-
-      })
+    updateSelectInput(session,
+                      "Y_Variables",
+                      choices = YCompsVariableSelector())
     
+  })
+  
   # Variable graphic
   output$pls_variables <- renderPlotly({
     
@@ -355,7 +414,7 @@ server <- function(input, output, session) {
                   Axis_1 = as.numeric(input$X_Variables), 
                   Axis_2 = as.numeric(input$Y_Variables))
   })
-
+  
   # Setting Y columns choices with var
   YCompsIndividualsSelector <- reactive({
     
@@ -369,7 +428,7 @@ server <- function(input, output, session) {
   })
   
   observeEvent(YCompsIndividualsSelector(),{
-
+    
     updateSelectInput(session,
                       "Y_Individuals",
                       choices = YCompsIndividualsSelector())
@@ -402,7 +461,7 @@ server <- function(input, output, session) {
                       choices = YColumns())
   })
   
-
+  
   
   XColumns <- reactive({
     
@@ -419,13 +478,73 @@ server <- function(input, output, session) {
                       "plot_X",
                       choices =  XColumns())
   })
-    
+  
   output$x_plot <- renderPlotly({
     
     toClass = input$Yvar
     x_plot(data = dataframe(), varX = input$plot_X, varY = input$plot_Y, class = toClass)
     
   })
+  
+  ################################ PREDICTION ####################################  
+  
+  PredDataframe <- eventReactive(input$doPrediction,{
+    
+    tryCatch(
+      {
+        
+        pred = read.csv(input$dataPred$datapath,
+                        header = input$PredHeader,
+                        sep = input$PredinSep)
+        
+        return(pred)
+        
+      }, error = function(e){
+        stop(safeError(e))
+      }
+    )
+  })
+  
+  # Print the data loaded
+  output$Predcontents <- DT::renderDataTable({
+    
+    df <- PredDataframe()
+    
+    if(input$PredDisplay == "head") {
+      return(head(df))
+    }
+    if(input$PredDisplay == "100") {
+      return(head(df, 100))
+    }
+    if(input$PredDisplay == "all") {
+      return(df)
+    }
+    
+  }) # output$contents renderdataTable
+  
+  Predict <- eventReactive(input$doPrediction,{ 
+    
+    tryCatch(
+      {
+        df <- PredDataframe()
+        
+        XFit <- input$Xvar
+        df <- df[,XFit]
+        df[,XFit] <- lapply(df[,XFit] , as.numeric)
+
+
+        pred <- predict(PLS(), newdata = df, type = input$type)
+        
+        return(pred)
+        
+      }, error = "There is an error"
+    )
+  }) 
+  
+  output$PrintPredict <- renderPrint(
+    
+    print(Predict())
+  )
   
 } # Server
 
