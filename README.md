@@ -7,6 +7,9 @@ The regression method of Partial Least Squares Discriminant Analysis, or supervi
 
 It is a method to maximize the covariance between the independent variables X and the dependent variable Y of highly multidimensional data by finding a linear subspace of the explanatory variables. The new subspace allows the prediction of the variable Y based on a reduced number of factors corresponding to the PLS components. Thus, these factors covering the subspace on which the independent variables are projected describe the behavior of the dependent variables Y.
 
+## Organisation 
+
+
 ## Contributors
 
 Matthieu Allier  
