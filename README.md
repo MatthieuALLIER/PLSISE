@@ -68,7 +68,7 @@ The three input parameters of the function :
 - cible : target vector
 - alpha : Threshold defining the contribution of the variables (significant or not)
 ```
-data <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
+selection <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
 ```
 Output :
 
