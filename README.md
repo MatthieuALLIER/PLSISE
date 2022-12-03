@@ -18,7 +18,7 @@ Once the installation is successful, you can now access all the features of the 
 
 For the following, we used the iris dataset available directly on R studio for the presentation and the tests of our various functions.
 
-## Function Fit
+## Fit function
 The fit function corresponds to our learning function which returns an object of type "PLSDA" as output. The three main parameters of the function fit :
 - formula : it is an object that defines the problem to solve
 - data : corresponds to the data frame to process
@@ -32,7 +32,7 @@ print(PLSDA)
 summary(PLSDA)
 ```
 
-## Function Predict
+## Predict function
 The predict function is a feature of our package allowing the prediction of the class on a new data set. This function takes 3 parameters as input:
 - PLSDA : It corresponds to the PLSDA object provided by the fit function
 - newdata : New data set to predict class membership.
@@ -41,7 +41,7 @@ The predict function is a feature of our package allowing the prediction of the 
 ypred <- predict(PLSDA, PLSDA$X, type = "class")
 ```
 
-## Function Variable selection
+##  Variables selection function
 The variable selection function allows to keep only the variables that are likely to be relevant for the predictive model. The method used for our selection is based on the principle of forward methods, i.e. starting from an empty set and inserting the variables as we go along, using a Fisher statistical test and checking the threshold value for the significance or not of the variable.
 
 The three input parameters of the function :
@@ -52,7 +52,8 @@ The three input parameters of the function :
 data <- select_variable(DF=iris[1:4],cible=iris$Species,alpha=0.03)
 ```
 
-## Function 
+## Classification report function
+
 
 
 ## Contributors
