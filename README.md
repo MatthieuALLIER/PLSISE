@@ -35,7 +35,6 @@ summary(PLSDA)
 ```
 Outputs :
 
-![print](https://github.com/h-titouan/PLSISE/blob/main/img/print.png)
 
 ## Predict function
 The predict function is a feature of our package allowing the prediction of the class on a new data set. This function takes 3 parameters as input:
