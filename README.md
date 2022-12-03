@@ -70,6 +70,9 @@ The three input parameters of the function :
 ```
 data <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
 ```
+Output :
+
+![selectvar](https://github.com/h-titouan/PLSISE/blob/main/img/selectvar.png)
 
 ## Graphics
 We have integrated graphics within our project to provide the user with a visual aspect and more clarity in our function outputs and results.
