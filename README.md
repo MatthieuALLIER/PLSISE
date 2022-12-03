@@ -39,6 +39,12 @@ The predict function is a feature of our package allowing the prediction of the 
 ypred <- predict(PLSDA, PLSDA$X, type = "class")
 ```
 
+## Function Variable selection
+The variable selection function allows to keep only the variables that are likely to be relevant for the predictive model. The method used for our selection is based on the principle of forward methods, i.e. starting from an empty set and inserting the variables as we go along, using a Fisher statistical test and checking the threshold value for the significance or not of the variable.
+```
+data <- select_variable(DF=iris[1:4],cible=iris$Species,alpha=0.01)
+```
+
 ## Contributors
 
 Matthieu Allier  
