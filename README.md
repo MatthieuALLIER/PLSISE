@@ -93,6 +93,9 @@ this function allows us to display the individuals on the factorial plane by tak
 ```
 pls_individuals(PLSDA)
 ```
+Output :
+
+![individuals](https://github.com/h-titouan/PLSISE/blob/main/img/individuals.png)
 
 3. pls_variables
 
