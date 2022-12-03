@@ -33,6 +33,7 @@ We also overloaded two methods to get a display adapted to our objects returned 
 print(PLSDA)
 summary(PLSDA)
 ```
+Outputs :
 ![print](https://github.com/h-titouan/PLSISE/blob/main/img/print.png)
 
 ## Predict function
