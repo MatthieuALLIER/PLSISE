@@ -1,10 +1,3 @@
-# VARIABLE SELECTION
-
-# FUNCTION INPUTS
-# DF: set of explanatory variables
-# target : target vector
-# alpha : Threshold defining the contribution of the variables (significant or not)
-
 select_variable <- function(DF,cible,alpha = 0.05){
   
   # Checking the parameters
@@ -72,11 +65,3 @@ select_variable <- function(DF,cible,alpha = 0.05){
   }
  return(lst_Var_Selected) # Selected output variables
 }
-
-# Test
-data(iris)
-str(iris)
-
-#Calling the function
-test <- select_variable(DF=iris[1:4],cible=iris$Species,alpha=0.01)
-print(test)
