@@ -13,7 +13,8 @@ The installation of the package is required and is done directly through the Git
 Once the installation is successful, you can now access all the features of the package, especially the functions you see below.
 - fit
 - predict
-- Variable selection
+- classification report
+- variables selection
 - ...
 
 For the following, we used the iris dataset available directly on R studio for the presentation and the tests of our various functions.
