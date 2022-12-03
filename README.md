@@ -15,7 +15,7 @@ Once the installation is successful, you can now access all the features of the 
 - predict
 - classification report
 - variables selection
-- plots
+- graphics
 - R Shiny Application
 
 For the following, we used the iris dataset available directly on R studio for the presentation and the tests of our various functions.
@@ -61,7 +61,8 @@ The three input parameters of the function :
 data <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
 ```
 
-## Plots function
+## Graphics
+We have integrated graphics within our project to provide the user with a visual aspect and more clarity in our function outputs and results.
 
 ## Contributors
 
