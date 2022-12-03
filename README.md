@@ -118,7 +118,7 @@ Once the application is launched, we arrive directly on the home page where we h
 
 Matthieu Allier  
 Léo Haton  
-Titouan Houde
+Titouan Houde 
 
 
 
