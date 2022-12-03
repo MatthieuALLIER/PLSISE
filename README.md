@@ -68,7 +68,7 @@ The three input parameters of the function :
 - cible : target vector
 - alpha : Threshold defining the contribution of the variables (significant or not)
 ```
-data <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
+selection <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
 ```
 Output :
 
@@ -109,10 +109,11 @@ Output :
 
 
 ## R Shiny application
-Once the application is launched, we arrive directly on the home page where we have to select our data set. The integration of the file on the application is customized. You can choose to import it with or without headers by choosing the column separator. You can also choose to display only the first few rows of the dataset or all of it. 
+Once the application is launched, we arrive directly on the "Add files" home page where we have to select our data set. The integration of the file on the application is customized. You can choose to import it with or without headers by choosing the column separator. You can also choose to display only the first rows of the dataset or the whole dataset.
 
 ![Accueil](https://github.com/h-titouan/PLSISE/blob/main/img/Accueil.png)
 
+You can see above the first lines of the iris set and on the right side of the page the descriptive statistics for each variable. We also note the information such as the length of the dataset and the type of the different modalities. 
 
 ## Contributors
 

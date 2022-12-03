@@ -244,7 +244,8 @@ ui <- fluidPage(theme = shinytheme('united'),
                   ) # NavBar Menu 
                   
                 ) # NavBar Page
-) # Fluid Page
+  ) # Fluid Page
+}
 
 server <- function(input, output, session) {
   
@@ -642,5 +643,8 @@ server <- function(input, output, session) {
   
 } # Server
 
-# Run the application 
-shinyApp(ui = ui, server = server)
+#'@export
+#'# Run the application
+shinyAppPLSISE <- function(ui, server){
+  shinyApp(ui, server)
+}
