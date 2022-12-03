@@ -113,6 +113,7 @@ Once the application is launched, we arrive directly on the home page where we h
 
 ![Accueil](https://github.com/h-titouan/PLSISE/blob/main/img/Accueil.png)
 
+You can see above the first lines of the iris set and on the right side of the page the descriptive statistics for each variable. We also note the information such as the length of the dataset and the type of the different modalities. 
 
 ## Contributors
 
