@@ -33,7 +33,7 @@ We also overloaded two methods to get a display adapted to our objects returned 
 print(PLSDA)
 summary(PLSDA)
 ```
-![print_summary](https://github.com/h-titouan/PLSISE/blob/main/img/print_summary.png)
+![print](https://github.com/h-titouan/PLSISE/blob/main/img/print.png)
 
 ## Predict function
 The predict function is a feature of our package allowing the prediction of the class on a new data set. This function takes 3 parameters as input:
