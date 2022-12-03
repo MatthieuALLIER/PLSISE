@@ -18,6 +18,9 @@ Once the installation is successful, you can now access all the features of the 
 
 ## Function Fit
 The fit function corresponds to our learning function which returns an object of type "PLSDA" as output.
+```
+PLSDA <- fit(formula = Species~., data = iris, ncomp = 2)
+```
 
 ## Contributors
 
