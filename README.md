@@ -82,6 +82,12 @@ This function also allows you to display the variables on the factorial plane in
 pls_variables(PLSDA)
 ```
 
+
+## R Shiny application
+Once the application is launched, we arrive directly on the home page where we have to select our data set. The integration of the file on the application is customized. You can choose to import it with or without headers by choosing the column separator. You can also choose to display only the first few rows of the dataset or all of it. 
+![Accueil](https://github.com/h-titouan/PLSISE/blob/main/img/Accueil.png)
+
+
 ## Contributors
 
 Matthieu Allier  
