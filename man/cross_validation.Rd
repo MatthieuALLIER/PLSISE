@@ -22,8 +22,8 @@ use "kFold" to split "data" in "cv" folds and use one of them as test at
 each validation.}
 }
 \value{
-MeanFscore : mean of fscore on validation, \n
- BestFscore : max fscore on validation,  \n
+MeanFscore : mean of fscore on validation,
+ BestFscore : max fscore on validation,  
  BestModel : model with best fscore on validation
 }
 \description{
