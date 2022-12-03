@@ -1,8 +1,5 @@
 
-load("PLSISE/R/functions.rdata")
-source("~/GitHub/PLSISE/R/libraries.R", echo=TRUE)
-setwd("~/GitHub/")
-ui <- fluidPage(theme = shinytheme('united'),
+ui <- function(){fluidPage(theme = shinytheme('united'),
                 
                 useShinyjs(),
                 
@@ -224,7 +221,8 @@ ui <- fluidPage(theme = shinytheme('united'),
                   ) # NavBar Menu 
                   
                 ) # NavBar Page
-) # Fluid Page
+  ) # Fluid Page
+}
 
 server <- function(input, output, session) {
   
@@ -567,5 +565,8 @@ server <- function(input, output, session) {
   
 } # Server
 
-# Run the application 
-shinyApp(ui = ui, server = server)
+# Run the application
+#'@export
+shinyAppPLSISE <- function(ui, server){
+  shinyApp(ui, server)
+}
