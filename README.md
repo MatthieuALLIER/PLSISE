@@ -45,6 +45,10 @@ The predict function is a feature of our package allowing the prediction of the 
 ```
 ypred <- predict(PLSDA = PLSDA, newdata = PLSDA$X, type = "class")
 ```
+Output :
+
+![predict](https://github.com/h-titouan/PLSISE/blob/main/img/predict.png)
+
 ## Classification report function
 This function takes two parameters as input :
 - y : Contains the class of individuals selected directly in our dataset
