@@ -82,6 +82,9 @@ this function allows us to display the scree plot of PLSDA corresponding to the 
 ```
 scree_plot(PLSDA)
 ```
+Output :
+
+![scree](https://github.com/h-titouan/PLSISE/blob/main/img/scree.png)
 
 2. pls_individuals
 this function allows us to display the individuals on the factorial plane by taking as input of the function a main parameter, the PLSDA class object and lets the user choose to redefine the 2 axes of the plane initially defined at "1" for Axis_1 and at "2" for Axis_2.
