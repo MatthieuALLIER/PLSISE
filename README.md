@@ -56,6 +56,9 @@ This function takes two parameters as input :
 ```
 classification_report(y = iris$Species, ypred = ypred)
 ```
+Outputs :
+
+![classreport](https://github.com/h-titouan/PLSISE/blob/main/img/classreport.png)
 
 ##  Variables selection function
 The variable selection function allows to keep only the variables that are likely to be relevant for the predictive model. The method used for our selection is based on the principle of forward methods, i.e. starting from an empty set and inserting the variables as we go along, using a Fisher statistical test and checking the threshold value for the significance or not of the variable.
