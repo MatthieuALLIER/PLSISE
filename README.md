@@ -16,6 +16,8 @@ Once the installation is successful, you can now access all the features of the 
 - Variable selection
 - ...
 
+For the following, we used the iris dataset available directly on R studio for the presentation and the tests of our various functions.
+
 ## Function Fit
 The fit function corresponds to our learning function which returns an object of type "PLSDA" as output. The three main parameters of the function fit :
 - formula : it is an object that defines the problem to solve
