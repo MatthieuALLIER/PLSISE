@@ -3,7 +3,8 @@ listOfPackages <- c(
   "shiny",
   "shinythemes",
   "shinyjs",
-  "DT"
+  "DT",
+  "dplyr"
 )
 
 skip <- ifelse(length(listOfPackages) == 0, T, F)

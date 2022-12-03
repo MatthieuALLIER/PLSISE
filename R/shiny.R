@@ -1,7 +1,7 @@
 
 load("PLSISE/R/functions.rdata")
 source("~/GitHub/PLSISE/R/libraries.R", echo=TRUE)
-
+setwd("~/GitHub/")
 ui <- fluidPage(theme = shinytheme('united'),
                 
                 useShinyjs(),
@@ -130,17 +130,14 @@ ui <- fluidPage(theme = shinytheme('united'),
                                                         Class = "class"),
                                             selected = "class"),
                                
-                               fluidRow(
-                                 column(3,
                                         actionButton(
                                           inputId = "doPrediction",
                                           label = "Predict my file !",
                                         ),
-                                 ),
-                                 column(1),
-                                 
-                               ),
 
+                               br(),
+                               br(),
+                          
                                # Input: Select number of rows to display ----
                                radioButtons(inputId = "PredDisplay", label = "Display",
                                             choices = c(Head = "head",
@@ -148,7 +145,9 @@ ui <- fluidPage(theme = shinytheme('united'),
                                                         All = "all"),
                                             selected = "head"),
                                
-                             ),
+                               downloadButton("downloadData", "Download predictions")
+                               
+                             ), # SidebarPanel
                              
                              mainPanel(
                                verbatimTextOutput("PrintPredict")
@@ -505,23 +504,6 @@ server <- function(input, output, session) {
     )
   })
   
-  # Print the data loaded
-  output$Predcontents <- DT::renderDataTable({
-    
-    df <- PredDataframe()
-    
-    if(input$PredDisplay == "head") {
-      return(head(df))
-    }
-    if(input$PredDisplay == "100") {
-      return(head(df, 100))
-    }
-    if(input$PredDisplay == "all") {
-      return(df)
-    }
-    
-  }) # output$contents renderdataTable
-  
   Predict <- eventReactive(input$doPrediction,{ 
     
     tryCatch(
@@ -531,19 +513,56 @@ server <- function(input, output, session) {
         XFit <- input$Xvar
         df <- df[,XFit]
         df[,XFit] <- lapply(df[,XFit] , as.numeric)
-
-
-        pred <- predict(PLS(), newdata = df, type = input$type)
         
+        
+        pred <- predict(PLS(), newdata = df, type = input$type)
+
         return(pred)
         
       }, error = "There is an error"
     )
-  }) 
+  })
+  
+  DataWithPred <- reactive({
+    
+    df <- PredDataframe()
+    colname <- ncol(df)
+    prediction <- Predict()
+    
+    newdf <- bind_cols(df, prediction)
+    if(ncol(newdf) == colname + 1){
+      colnames(newdf)[colname+1] <- "Class"
+    }
+    return(newdf)
+  })
+  
+  # Print the data loaded
+  output$Predcontents <- DT::renderDataTable({
+    
+    if(input$PredDisplay == "head") {
+      return(head(DataWithPred()))
+    }
+    if(input$PredDisplay == "100") {
+      return(head(DataWithPred(), 100))
+    }
+    if(input$PredDisplay == "all") {
+      return(DataWithPred())
+    }
+    
+  }) # output$contents renderdataTable
   
   output$PrintPredict <- renderPrint(
     
     print(Predict())
+  )
+  
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste(substr(input$dataPred, 1, nchar(input$dataPred)-4), "_Predicted", ".csv", sep = "")
+    },
+    content = function(file) {
+      write.csv(DataWithPred(), file, row.names = FALSE)
+    }
   )
   
 } # Server
