@@ -33,6 +33,9 @@ We also overloaded two methods to get a display adapted to our objects returned 
 print(PLSDA)
 summary(PLSDA)
 ```
+Outputs :
+
+![print](https://github.com/h-titouan/PLSISE/blob/main/img/print.png)
 
 ## Predict function
 The predict function is a feature of our package allowing the prediction of the class on a new data set. This function takes 3 parameters as input:
@@ -42,6 +45,10 @@ The predict function is a feature of our package allowing the prediction of the 
 ```
 ypred <- predict(PLSDA = PLSDA, newdata = PLSDA$X, type = "class")
 ```
+Output :
+
+![predict](https://github.com/h-titouan/PLSISE/blob/main/img/predict.png)
+
 ## Classification report function
 This function takes two parameters as input :
 - y : Contains the class of individuals selected directly in our dataset
@@ -49,6 +56,9 @@ This function takes two parameters as input :
 ```
 classification_report(y = iris$Species, ypred = ypred)
 ```
+Outputs :
+
+![classreport](https://github.com/h-titouan/PLSISE/blob/main/img/classreport.png)
 
 ##  Variables selection function
 The variable selection function allows to keep only the variables that are likely to be relevant for the predictive model. The method used for our selection is based on the principle of forward methods, i.e. starting from an empty set and inserting the variables as we go along, using a Fisher statistical test and checking the threshold value for the significance or not of the variable.
@@ -60,27 +70,42 @@ The three input parameters of the function :
 ```
 data <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
 ```
+Output :
+
+![selectvar](https://github.com/h-titouan/PLSISE/blob/main/img/selectvar.png)
 
 ## Graphics
 We have integrated graphics within our project to provide the user with a visual aspect and more clarity in our function outputs and results.
 There are 3 main functions:
 1. scree_plot
+
 this function allows us to display the scree plot of PLSDA corresponding to the object X. It takes only one input parameter, the object of class PLSDA.
 ```
 scree_plot(PLSDA)
 ```
+Output :
+
+![scree](https://github.com/h-titouan/PLSISE/blob/main/img/scree.png)
 
 2. pls_individuals
+
 this function allows us to display the individuals on the factorial plane by taking as input of the function a main parameter, the PLSDA class object and lets the user choose to redefine the 2 axes of the plane initially defined at "1" for Axis_1 and at "2" for Axis_2.
 ```
 pls_individuals(PLSDA)
 ```
+Output :
+
+![individuals](https://github.com/h-titouan/PLSISE/blob/main/img/individuals.png)
 
 3. pls_variables
+
 This function also allows you to display the variables on the factorial plane in the form of a circle to visualize the correlation between them. It takes the same input parameters as the previous function pls_individuals.
 ```
 pls_variables(PLSDA)
 ```
+Output :
+
+![variables](https://github.com/h-titouan/PLSISE/blob/main/img/variables.png)
 
 
 ## R Shiny application
@@ -93,7 +118,7 @@ Once the application is launched, we arrive directly on the home page where we h
 
 Matthieu Allier  
 Léo Haton  
-Titouan Houde
+Titouan Houde 
 
 
 
