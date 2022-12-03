@@ -63,6 +63,24 @@ data <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
 
 ## Graphics
 We have integrated graphics within our project to provide the user with a visual aspect and more clarity in our function outputs and results.
+There are 3 main functions:
+1. scree_plot
+this function allows us to display the scree plot of PLSDA corresponding to the object X. It takes only one input parameter, the object of class PLSDA.
+```
+scree_plot(PLSDA)
+```
+
+2. pls_individuals
+this function allows us to display the individuals on the factorial plane by taking as input of the function a main parameter, the PLSDA class object and lets the user choose to redefine the 2 axes of the plane initially defined at "1" for Axis_1 and at "2" for Axis_2.
+```
+pls_individuals(PLSDA)
+```
+
+3. pls_variables
+This function also allows you to display the variables on the factorial plane in the form of a circle to visualize the correlation between them. It takes the same input parameters as the previous function pls_individuals.
+```
+pls_variables(PLSDA)
+```
 
 ## Contributors
 
