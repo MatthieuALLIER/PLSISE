@@ -39,7 +39,7 @@ The predict function is a feature of our package allowing the prediction of the 
 - newdata : New data set to predict class membership.
 - type : The type of output desired by the function. By default it is set to "class" to get the membership of the predicted class. It is also possible to set it to "posterior" to obtain the probabilities of class membership.
 ```
-ypred <- predict(PLSDA, PLSDA$X, type = "class")
+ypred <- predict(PLSDA = PLSDA, newdata = PLSDA$X, type = "class")
 ```
 
 ##  Variables selection function
@@ -50,12 +50,18 @@ The three input parameters of the function :
 - cible : target vector
 - alpha : Threshold defining the contribution of the variables (significant or not)
 ```
-data <- select_variable(DF=iris[1:4],cible=iris$Species,alpha=0.03)
+data <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
 ```
 
 ## Classification report function
+This function takes two parameters as input :
+- y : Contains the class of individuals selected directly in our dataset
+- ypred : predicted data provided by the predict function
+```
+classification_report(y = iris$Species, ypred = ypred)
+```
 
-
+## function
 
 ## Contributors
 
