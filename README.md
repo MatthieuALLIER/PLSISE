@@ -15,7 +15,8 @@ Once the installation is successful, you can now access all the features of the 
 - predict
 - classification report
 - variables selection
-- ...
+- plots
+- R Shiny Application
 
 For the following, we used the iris dataset available directly on R studio for the presentation and the tests of our various functions.
 
@@ -41,6 +42,13 @@ The predict function is a feature of our package allowing the prediction of the 
 ```
 ypred <- predict(PLSDA = PLSDA, newdata = PLSDA$X, type = "class")
 ```
+## Classification report function
+This function takes two parameters as input :
+- y : Contains the class of individuals selected directly in our dataset
+- ypred : predicted data provided by the predict function
+```
+classification_report(y = iris$Species, ypred = ypred)
+```
 
 ##  Variables selection function
 The variable selection function allows to keep only the variables that are likely to be relevant for the predictive model. The method used for our selection is based on the principle of forward methods, i.e. starting from an empty set and inserting the variables as we go along, using a Fisher statistical test and checking the threshold value for the significance or not of the variable.
@@ -53,15 +61,7 @@ The three input parameters of the function :
 data <- select_variable(DF = iris[1:4], cible = iris$Species, alpha = 0.03)
 ```
 
-## Classification report function
-This function takes two parameters as input :
-- y : Contains the class of individuals selected directly in our dataset
-- ypred : predicted data provided by the predict function
-```
-classification_report(y = iris$Species, ypred = ypred)
-```
-
-## function
+## Plots function
 
 ## Contributors
 
