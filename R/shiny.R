@@ -2,6 +2,7 @@
 load("PLSISE/R/functions.rdata")
 source("~/GitHub/PLSISE/R/libraries.R", echo=TRUE)
 setwd("~/GitHub/")
+
 ui <- fluidPage(theme = shinytheme('united'),
                 
                 useShinyjs(),
@@ -54,7 +55,8 @@ ui <- fluidPage(theme = shinytheme('united'),
                              ),
                              
                              mainPanel(
-                               verbatimTextOutput("summary")
+                               verbatimTextOutput("summary"),
+                              
                              ) # Main Panel for summary
                              
                            ), # Sidebar Layout
@@ -69,21 +71,30 @@ ui <- fluidPage(theme = shinytheme('united'),
                   ), # Add Files Tab Panel layout
                   
                   
-                  tabPanel(title = "Fit",
+                  tabPanel(title = "Fit", value = "Fit",
                            
                            sidebarLayout(
                              
                              sidebarPanel(
                                # X variables checkbox
-                               checkboxGroupInput(inputId = "Xvar",
-                                                  label = "Select your X variables",
-                                                  choices = c()),
+                               selectInput(inputId = "Xvar",
+                                           label = "Select your X variables",
+                                           choices = c(),
+                                           multiple = TRUE),
                                
                                # Y variables checkbox
-                               checkboxGroupInput(inputId = "Yvar",
+                               selectInput(inputId = "Yvar",
                                                   label = "Select your Y variables",
-                                                  choices = c()),
+                                                  choices = c(),
+                                           multiple = TRUE),
                                
+                               actionButton(
+                                 inputId = "VariablesRecommended",
+                                 label = "Show recommended variables"),
+                               
+                               br(),
+                               br(),
+                              
                                # Input: Simple integer interval ----
                                sliderInput(inputId = "Ncomps", 
                                            label = "Select a number of components",
@@ -94,11 +105,20 @@ ui <- fluidPage(theme = shinytheme('united'),
                                actionButton(
                                  inputId = "RunPLS",
                                  label = "Run PLS Regression"),
+                               
+                               br(),
+                               br(),
+                               
+                               actionButton(
+                                 inputId = "CrossValidation",
+                                 label = "Run a cross validation"),
                              ), # SiderBarPanel
                              
                              mainPanel(
+                               verbatimTextOutput("VarRecommended"),
+                               verbatimTextOutput("fit"),
+                               verbatimTextOutput("CrossVal"),
                                
-                               verbatimTextOutput("fit")
                              ), # Main panel
                            ),
                   ),
@@ -130,14 +150,14 @@ ui <- fluidPage(theme = shinytheme('united'),
                                                         Class = "class"),
                                             selected = "class"),
                                
-                                        actionButton(
-                                          inputId = "doPrediction",
-                                          label = "Predict my file !",
-                                        ),
-
+                               actionButton(
+                                 inputId = "doPrediction",
+                                 label = "Predict my file !",
+                               ),
+                               
                                br(),
                                br(),
-                          
+                               
                                # Input: Select number of rows to display ----
                                radioButtons(inputId = "PredDisplay", label = "Display",
                                             choices = c(Head = "head",
@@ -232,19 +252,19 @@ server <- function(input, output, session) {
   hideTab(inputId = "Tabspanel", target = "Predict")
   hideTab(inputId = "Tabspanel", target = "Graphics")
   hide("RunPLS")
-  
+  hide("downloadData")
+  hide("CrossValidation")
+
   dataframe <- eventReactive(input$submitFile,{ 
     
     tryCatch(
       {
-        
         data = read.csv(input$datafile$datapath,
                         header = input$header,
                         sep = input$inSep)
         
         # Must be below data !  
         showTab(inputId = "Tabspanel", target = "Fit")
-        
         return(data)
         
       }, error = function(e){
@@ -287,6 +307,14 @@ server <- function(input, output, session) {
     
   })
   
+  # Update each selector
+  observeEvent(dataframe(),{
+
+      updateSelectInput(session,
+                        "Xvar",
+                        choices = colnames(dataframe()))
+  })
+  
   # Set the number of Comp and allow user to run PLS
   NumberOfComps <- reactive({
     
@@ -309,22 +337,35 @@ server <- function(input, output, session) {
                       max = NumberOfComps())
   })
   
-  # X variables to select
-  observeEvent(dataframe(),{
-    
-    updateCheckboxGroupInput(session,
-                             "Xvar",
-                             choices = colnames(dataframe()))
-  })
-  
   #  Y variables to select according to X variables
   observeEvent(YFitSelector(),{
     
-    updateCheckboxGroupInput(session,
-                             "Yvar",
-                             choices = YFitSelector())
+    updateSelectInput(session,
+                      "Yvar",
+                      choices = YFitSelector())
     
   })  
+  
+  VariablesRecommended <- eventReactive(input$VariablesRecommended,{ 
+    
+    tryCatch(
+      {
+        data = dataframe()
+        selection <- select_variable(DF = data[,input$Xvar], 
+                                     cible = data[,input$Yvar])
+        
+        return(selection)
+        
+      }, error = function(e){
+        stop(safeError(e))
+      }
+    )
+  })
+  
+  output$VarRecommended <- renderPrint({
+    
+    return(VariablesRecommended())
+  })
   
   PLS <- eventReactive(input$RunPLS,{ 
     
@@ -333,10 +374,9 @@ server <- function(input, output, session) {
         df <- dataframe()
         
         XtoSubset <- input$Xvar
-        
         df[,XtoSubset] <- lapply(df[,XtoSubset] , as.numeric)
-        YtoFactor <- input$Yvar
         
+        YtoFactor <- input$Yvar
         df[YtoFactor] <- lapply(df[YtoFactor] , factor)
         
         Subset = c(XtoSubset, YtoFactor)
@@ -346,7 +386,8 @@ server <- function(input, output, session) {
         
         PLSDA <- fit(formula = PlsFormula, data = df, ncomp = input$Ncomps)
         
-        # Must be below pls !  
+        # Must be below pls !
+        show("CrossValidation")
         showTab(inputId = "Tabspanel", target = "Predict")
         showTab(inputId = "Tabspanel", target = "Graphics")
         
@@ -361,7 +402,39 @@ server <- function(input, output, session) {
   output$fit <- renderPrint({
     
     return(PLS())
+  })
+
+  CrossValidation <- eventReactive(input$CrossValidation,{ 
     
+    tryCatch(
+      {
+        df <- dataframe()
+        
+        XtoSubset <- input$Xvar
+        df[,XtoSubset] <- lapply(df[,XtoSubset] , as.numeric)
+        
+        YtoFactor <- input$Yvar
+        df[YtoFactor] <- lapply(df[YtoFactor] , factor)
+        
+        Subset = c(XtoSubset, YtoFactor)
+        df <- df[, Subset]
+        
+        CrossValFormula = as.formula(paste(YtoFactor, "~", ".", sep = ""))
+        
+        CrossVal <- cross_validation(formula = CrossValFormula, data = df, 
+                                     ncomp = input$Ncomps)
+
+        return(CrossVal)
+        
+      }, error = function(e){
+        stop(safeError(e))
+      }
+    )
+  }) 
+  
+  output$CrossVal <- renderPrint({
+    
+    return(CrossValidation())
   })
   
   # Scree plot graphic
@@ -495,6 +568,8 @@ server <- function(input, output, session) {
         pred = read.csv(input$dataPred$datapath,
                         header = input$PredHeader,
                         sep = input$PredinSep)
+        show("downloadData")
+        
         
         return(pred)
         
