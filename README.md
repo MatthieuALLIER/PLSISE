@@ -17,10 +17,19 @@ Once the installation is successful, you can now access all the features of the 
 - ...
 
 ## Function Fit
-The fit function corresponds to our learning function which returns an object of type "PLSDA" as output.
+The fit function corresponds to our learning function which returns an object of type "PLSDA" as output. The three main parameters of the function fit :
+- formula : it is an object that defines the problem to solve
+- data : corresponds to the data frame to process
+- ncomp : number of components to be retained 
 ```
 PLSDA <- fit(formula = Species~., data = iris, ncomp = 2)
 ```
+We also overloaded two methods to get a display adapted to our objects returned by fit. The first one is the print function which provides a ranking function to assign classes to individuals. The second overloaded function is the summary function.
+```
+print(PLSDA)
+summary(PLSDA)
+```
+
 
 ## Contributors
 
