@@ -34,6 +34,7 @@ print(PLSDA)
 summary(PLSDA)
 ```
 Outputs :
+
 ![print](https://github.com/h-titouan/PLSISE/blob/main/img/print.png)
 
 ## Predict function
