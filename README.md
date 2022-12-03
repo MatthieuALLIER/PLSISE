@@ -30,6 +30,14 @@ print(PLSDA)
 summary(PLSDA)
 ```
 
+## Function Predict
+The predict function is a feature of our package allowing the prediction of the class on a new data set. This function takes 3 parameters as input:
+- PLSDA : It corresponds to the PLSDA object provided by the fit function
+- newdata : New data set to predict class membership.
+- type : The type of output desired by the function. By default it is set to "class" to get the membership of the predicted class. It is also possible to set it to "posterior" to obtain the probabilities of class membership.
+```
+ypred <- predict(PLSDA, PLSDA$X, type = "class")
+```
 
 ## Contributors
 
