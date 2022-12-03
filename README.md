@@ -11,7 +11,7 @@ It is a method to maximize the covariance between the independent variables X an
 The installation of the package is required and is done directly through the Github access. In order to do this ...
 
 Once the installation is successful, you can now access all the features of the package, especially the functions you see below.
-- 1. fit
+- fit
 - prediction
 - Variable selection
 - ...
