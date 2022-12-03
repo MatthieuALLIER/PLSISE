@@ -103,6 +103,9 @@ This function also allows you to display the variables on the factorial plane in
 ```
 pls_variables(PLSDA)
 ```
+Output :
+
+![variables](https://github.com/h-titouan/PLSISE/blob/main/img/variables.png)
 
 
 ## R Shiny application
