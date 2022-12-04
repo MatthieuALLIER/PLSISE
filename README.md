@@ -8,7 +8,15 @@ The regression method of Partial Least Squares Discriminant Analysis, or supervi
 It is a method to maximize the covariance between the independent variables X and the dependent variable Y of highly multidimensional data by finding a linear subspace of the explanatory variables. The new subspace allows the prediction of the variable Y based on a reduced number of factors corresponding to the PLS components. Thus, these factors covering the subspace on which the independent variables are projected describe the behavior of the dependent variables Y.
 
 ## Package 
-The installation of the package is required and is done directly through the Github access. In order to do this ...
+The installation of the package is necessary and is done directly via the Github access. To do this, the user will need to install and load the 'devtools' library.
+```
+install.packages("devtools") #install package
+library(devtools) # load package
+```
+You can now install our package directly on github via the following command:
+```
+install_github("h-titouan/PLSISE", force = T)
+```
 
 Once the installation is successful, you can now access all the features of the package, especially the functions you see below.
 - fit
