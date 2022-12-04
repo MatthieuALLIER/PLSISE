@@ -136,6 +136,9 @@ We thus obtain on the right hand side, the information containing the coefficien
 
 ![graphpred](https://github.com/h-titouan/PLSISE/blob/main/img/graphpred.png)
 
+The user can then load his file with the new data in the left-hand section and just like the loading of the first file, it is sufficient to select the separator of the columns, if you wish to display the header or not. 
+
+To display the results of the model, the user must also mention the type of prediction value he wants to return. The choice is between "class", "value" and "softmax". In our case, we want to see the class to which our new data belong. 
 
 ## Contributors
 
