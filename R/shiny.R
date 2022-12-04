@@ -642,5 +642,11 @@ server <- function(input, output, session) {
 
 #'@export
 shinyAppPLSISE <- function(){
-  shiny::shinyApp(ui, server)
+  library("plotly")
+  library("shiny")
+  library("shinythemes")
+  library("shinyjs")
+  library("DT")
+  library("dplyr")
+  shinyApp(ui, server)
 }
