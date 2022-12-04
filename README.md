@@ -13,7 +13,7 @@ The installation of the package is necessary and is done directly via the Github
 install.packages("devtools") #install package
 library(devtools) # load package
 ```
-You can now install our package directly on github via the following command:
+You can now install our package directly on github via the command attached below.
 ```
 install_github("h-titouan/PLSISE", force = T)
 ```
