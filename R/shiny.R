@@ -641,6 +641,6 @@ server <- function(input, output, session) {
 } # Server
 
 #'@export
-shinyAppPLSISE <- function(ui, server){
+shinyAppPLSISE <- function(){
   shiny::shinyApp(ui, server)
 }
