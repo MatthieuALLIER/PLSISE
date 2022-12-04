@@ -24,7 +24,7 @@
 #'
 #' @export
 #'
-cross_validation <- function(formula, data, ncomp, cv = 5, method = "splitTrainTest"){
+cross_validation <- function(formula, data, ncomp, cv = 5, method = "kFold"){
   n <- nrow(data)
   data <- data[sample(1:n),]
   fold <- list()
