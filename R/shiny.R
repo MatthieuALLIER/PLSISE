@@ -640,7 +640,13 @@ server <- function(input, output, session) {
   
 } # Server
 
-#'@export
+#' shinyAppPLSISE from PLSISE
+#'
+#' @description
+#' Launch shinyapp for PLSISE use in interface
+#'
+#' @export
+#'
 shinyAppPLSISE <- function(){
   library("plotly")
   library("shiny")

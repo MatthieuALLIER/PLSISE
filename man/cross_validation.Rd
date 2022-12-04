@@ -4,7 +4,7 @@
 \alias{cross_validation}
 \title{Cross validation from PLSISE}
 \usage{
-cross_validation(formula, data, ncomp, cv = 5, method = "splitTrainTest")
+cross_validation(formula, data, ncomp, cv = 5, method = "kFold")
 }
 \arguments{
 \item{formula}{an object of class "formula", symbolic description of model 
