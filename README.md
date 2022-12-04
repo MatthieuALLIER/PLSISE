@@ -55,7 +55,7 @@ ypred <- predict(PLSDA = PLSDA, newdata = PLSDA$X, type = "class")
 ```
 Output :
 
-![predict](https://github.com/h-titouan/PLSISE/blob/main/img/predict.png)
+![predict](https://github.com/h-titouan/PLSISE/blob/main/img/function_predict.png)
 
 ## Classification report function
 This function takes two parameters as input :
@@ -93,7 +93,7 @@ scree_plot(PLSDA)
 ```
 Output :
 
-![scree](https://github.com/h-titouan/PLSISE/blob/main/img/scree.png)
+![scree](https://github.com/h-titouan/PLSISE/blob/main/img/screeplot.PNG)
 
 2. pls_individuals
 
@@ -103,7 +103,7 @@ pls_individuals(PLSDA)
 ```
 Output :
 
-![individuals](https://github.com/h-titouan/PLSISE/blob/main/img/individuals.png)
+![individuals](https://github.com/h-titouan/PLSISE/blob/main/img/individuals.PNG)
 
 3. pls_variables
 
@@ -113,20 +113,20 @@ pls_variables(PLSDA)
 ```
 Output :
 
-![variables](https://github.com/h-titouan/PLSISE/blob/main/img/variables.png)
+![variables](https://github.com/h-titouan/PLSISE/blob/main/img/correlation_circle.PNG)
 
 
 ## R Shiny application
 Once the application is launched, we arrive directly on the "Add files" home page where we have to select our data set. The integration of the file on the application is customized. You can choose to import it with or without headers by choosing the column separator. You can also choose to display only the first rows of the dataset or the whole dataset.
 
-![addfiles](https://github.com/h-titouan/PLSISE/blob/main/img/addfiles.png)
+![addfiles](https://github.com/h-titouan/PLSISE/blob/main/img/addfiles.PNG)
 
 
 You can see above the first lines of the iris set and on the right side of the page the descriptive statistics for each variable. We also note the information such as the length of the dataset and the type of the different modalities. 
 
 The dataset is loaded, the user can now go to the next tab entitled "fit" for create a fit model. 
 
-![graphfit](https://github.com/h-titouan/PLSISE/blob/main/img/graphfit.png)
+![graphfit](https://github.com/h-titouan/PLSISE/blob/main/img/fit.PNG)
 
 The active fit tab allows us to instantiate our model according to certain criteria. The user must first select the X variables for the training of the model and then select the target variable Y. In our case, the iris base is selected to learn a model with our four quantitative variables and taking into account our target variable including our different modalities. 
 
@@ -134,7 +134,7 @@ It remains to define the number of components desired for the model. The choices
 
 We thus obtain on the right hand side, the information containing the coefficients for each of our variables according to each modality. We also have the information on the values taken by our components according to each modality. The user also has the possibility to test his model on existing data. In our case, we always use the iris set.
 
-![graphpred](https://github.com/h-titouan/PLSISE/blob/main/img/graphpred.png)
+![graphpred](https://github.com/h-titouan/PLSISE/blob/main/img/predict.PNG)
 
 The user can then load his file with the new data in the left-hand section and just like the loading of the first file, it is sufficient to select the separator of the columns, if you wish to display the header or not. 
 
@@ -146,7 +146,7 @@ We also have access to the data table at the bottom of the page where we find th
 
 The user also has the possibility to put these results in a more visual way thanks to the different graphics present in the last tab entitled "graphics". Four choices are possible to represent these data.
 
-![graphics](https://github.com/h-titouan/PLSISE/blob/main/img/graphics.png)
+![graphics](https://github.com/h-titouan/PLSISE/blob/main/img/explanatory_variables.PNG)
 
 ## Contributors
 
