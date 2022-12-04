@@ -140,6 +140,14 @@ The user can then load his file with the new data in the left-hand section and j
 
 To display the results of the model, the user must also mention the type of prediction value he wants to return. The choice is between "class", "value" and "softmax". In our case, we want to see the class to which our new data belong. 
 
+Once the user clicks on the "Predict my file" button, the results of the classes to which the user belongs are displayed on the right-hand side of the page. 
+
+We also have access to the data table at the bottom of the page where we find the information of our quantitative descriptive variables with the new column of predictions for each of the new observations.
+
+The user also has the possibility to put these results in a more visual way thanks to the different graphics present in the last tab entitled "graphics". Four choices are possible to represent these data.
+
+![graphics](https://github.com/h-titouan/PLSISE/blob/main/img/graphics.png)
+
 ## Contributors
 
 Matthieu Allier  
