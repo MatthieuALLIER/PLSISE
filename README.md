@@ -134,7 +134,7 @@ It remains to define the number of components desired for the model. The choices
 
 We thus obtain on the right hand side, the information containing the coefficients for each of our variables according to each modality. We also have the information on the values taken by our components according to each modality. The user also has the possibility to test his model on existing data. In our case, we always use the iris set.
 
-![graphpredict](https://github.com/h-titouan/PLSISE/blob/main/img/graphpredict.png)
+![graphpred](https://github.com/h-titouan/PLSISE/blob/main/img/graphpred.png)
 
 
 ## Contributors
