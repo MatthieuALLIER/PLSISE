@@ -121,9 +121,11 @@ Once the application is launched, we arrive directly on the "Add files" home pag
 
 ![addfiles](https://github.com/h-titouan/PLSISE/blob/main/img/addfiles.png)
 
+
 You can see above the first lines of the iris set and on the right side of the page the descriptive statistics for each variable. We also note the information such as the length of the dataset and the type of the different modalities. 
 
 The dataset is loaded, the user can now go to the next tab entitled "fit" for create a fit model. 
+
 
 ![graphfit](https://github.com/h-titouan/PLSISE/blob/main/img/graphfit.png)
 
