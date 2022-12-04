@@ -113,7 +113,7 @@ pls_variables(PLSDA)
 ```
 Output :
 
-![variables](https://github.com/h-titouan/PLSISE/blob/main/img/correlation circle.PNG)
+![variables](https://github.com/h-titouan/PLSISE/blob/main/img/correlation_circle.PNG)
 
 
 ## R Shiny application
@@ -146,7 +146,7 @@ We also have access to the data table at the bottom of the page where we find th
 
 The user also has the possibility to put these results in a more visual way thanks to the different graphics present in the last tab entitled "graphics". Four choices are possible to represent these data.
 
-![graphics](https://github.com/h-titouan/PLSISE/blob/main/img/explanatory variables.PNG)
+![graphics](https://github.com/h-titouan/PLSISE/blob/main/img/explanatory_variables.PNG)
 
 ## Contributors
 
