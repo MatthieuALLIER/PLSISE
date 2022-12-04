@@ -132,7 +132,9 @@ The active fit tab allows us to instantiate our model according to certain crite
 
 It remains to define the number of components desired for the model. The choices for this parameter range from two to four components. In our case, we have represented the model for three components.
 
-We thus obtain on the right hand side, the information containing the coefficients for each of our variables according to each modality. We also have the information on the values taken by our components according to each modality.
+We thus obtain on the right hand side, the information containing the coefficients for each of our variables according to each modality. We also have the information on the values taken by our components according to each modality. The user also has the possibility to test his model on existing data. In our case, we always use the iris set.
+
+![graphpredict](https://github.com/h-titouan/PLSISE/blob/main/img/graphpredict.png)
 
 
 ## Contributors
