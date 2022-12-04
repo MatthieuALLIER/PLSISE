@@ -128,7 +128,12 @@ The dataset is loaded, the user can now go to the next tab entitled "fit" for cr
 
 ![graphfit](https://github.com/h-titouan/PLSISE/blob/main/img/graphfit.png)
 
-The active fit tab allows us to instantiate our model according to certain criteria. The user must first select the X variables for the training of the model and then select the target variable Y. In our case, the iris base is selected to learn a model with our four quantitative variables and taking into account our target variable including our different modalities.
+The active fit tab allows us to instantiate our model according to certain criteria. The user must first select the X variables for the training of the model and then select the target variable Y. In our case, the iris base is selected to learn a model with our four quantitative variables and taking into account our target variable including our different modalities. 
+
+It remains to define the number of components desired for the model. The choices for this parameter range from two to four components. In our case, we have represented the model for three components.
+
+We thus obtain on the right hand side, the information containing the coefficients for each of our variables according to each modality. We also have the information on the values taken by our components according to each modality.
+
 
 ## Contributors
 
