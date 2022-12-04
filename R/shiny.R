@@ -1,9 +1,6 @@
 
-load("PLSISE/R/functions.rdata")
-source("~/GitHub/PLSISE/R/libraries.R", echo=TRUE)
-setwd("~/GitHub/")
-
-ui <- fluidPage(theme = shinytheme('united'),
+ui <- function(){
+  fluidPage(theme = shinytheme('united'),
                 
                 useShinyjs(),
                 
