@@ -1,3 +1,19 @@
+#' selection variables from PLSISE
+#'
+#' @description
+#' Predict class, probabilities or values of X data based on a fitted PLS-DA model
+#'
+#' @param DF A data frame in which to look for variables with
+#'   which to predict.
+
+#' @param cible vector Y representing the different modalities for the membership classes
+#'
+#' @param alpha significance level for the variables to be included in the selection
+#'
+#' @returns lst_Var_Selected variables selected by the algorithm
+#'
+#' @export
+#'
 select_variable <- function(DF,cible,alpha = 0.05){
   
   # Checking the parameters
