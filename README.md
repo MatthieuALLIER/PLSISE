@@ -126,8 +126,9 @@ You can see above the first lines of the iris set and on the right side of the p
 
 The dataset is loaded, the user can now go to the next tab entitled "fit" for create a fit model. 
 
-
 ![graphfit](https://github.com/h-titouan/PLSISE/blob/main/img/graphfit.png)
+
+The active fit tab allows us to instantiate our model according to certain criteria. The user must first select the X variables for the training of the model and then select the target variable Y. In our case, the iris base is selected to learn a model with our four quantitative variables and taking into account our target variable including our different modalities.
 
 ## Contributors
 
